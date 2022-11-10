@@ -1,0 +1,44 @@
+/* eslint-disable import/no-cycle */
+import { Sequelize } from 'sequelize'
+
+import defineUser from './user'
+import definePermission from './permission'
+import defineRole from './role'
+import defineRolePermission from './rolePermission'
+import defineUserRole from './userRole'
+import defineFile from './file'
+import defineLanguage from './language'
+import defineLocalization from './localization'
+import defineLocalizationValue from './localizationValue'
+
+import defineFileLog from './logs/fileLog'
+import defineRoleLog from './logs/roleLog'
+import defineUserLog from './logs/userLog'
+import defineResortLog from './logs/resortLog'
+
+import defineLog from './logs/log'
+
+// NOTE: modelName is same as model key (but with small first character)
+const modelsBuilder = (instance: Sequelize) => ({
+	User: defineUser(instance, 'user'),
+	Permission: definePermission(instance, 'permission'),
+	Role: defineRole(instance, 'role'),
+	RolePermission: defineRolePermission(instance, 'rolePermission'),
+	UserRole: defineUserRole(instance, 'userRole'),
+	File: defineFile(instance, 'file'),
+	Language: defineLanguage(instance, 'language'),
+	Localization: defineLocalization(instance, 'localization'),
+	LocalizationValue: defineLocalizationValue(instance, 'localizationValue'),
+	
+	RoleLog: defineRoleLog(instance, 'roleLog'),
+	FileLog: defineFileLog(instance, 'fileLog'),
+	UserLog: defineUserLog(instance, 'userLog'),
+	ResortLog: defineResortLog(instance, 'resortLog'),
+
+    Log: defineLog(instance, 'logs')
+
+    
+})
+
+// eslint-disable-next-line import/prefer-default-export
+export { modelsBuilder }

@@ -1,0 +1,16 @@
+{
+    "userForgotPassword": {
+        "body": "Click on the next button to reset your password",
+        "button": "Reset password",
+        "footer": "TMR Datawarehouse",
+        "path": "http://${req.headers.host}/forgotpassword/${token}",
+        "subject": "Password reset - TMR Datawarehouse"
+    },
+    "userInvitation": {
+        "body": "points",
+        "button": "button",
+        "footer": "footer",
+        "path": "http://${req.headers.host}/reset/${token}",
+        "subject": "subject"
+    }
+}

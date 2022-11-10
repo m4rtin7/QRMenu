@@ -1,0 +1,28 @@
+# project
+/node_modules
+/logs
+/coverage
+/dist
+/apidoc
+/files
+/src/ts-joi-interfaces
+/temp
+.env
+.coverage
+# package managers
+package-lock.json
+yarn.lock
+yarn-error.log
+# IDEs
+.idea
+# OS
+.DS_Store
+# postgres
+/docker/development/postgres/pgdata/**/*
+# jsreport
+
+# pgsync
+__pycache__
+
+# excluded docs
+/docs/

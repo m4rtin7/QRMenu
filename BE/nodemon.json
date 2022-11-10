@@ -1,0 +1,9 @@
+{
+	"watch": [
+		"src/"
+	],
+	"ext": "ts,json,ejs,html",
+	"events": {
+		"restart": "npm run translate-scanner"
+	}
+}

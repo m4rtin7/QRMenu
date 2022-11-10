@@ -1,0 +1,16 @@
+{
+    "userForgotPassword": {
+        "body": "Vaše heslo si obnovíte kliknutím na nasledovné tlačidlo",
+        "button": "Obnoviť heslo",
+        "footer": "TMR Datawarehouse",
+        "path": "http://${req.headers.host}/forgotpassword/${token}",
+        "subject": "Obnova hesla - TMR Datawarehouse"
+    },
+    "userInvitation": {
+        "body": "body",
+        "button": "button",
+        "footer": "footer",
+        "path": "http://${req.headers.host}/reset/${token}",
+        "subject": "subject"
+    }
+}
