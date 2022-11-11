@@ -1,0 +1,59 @@
+{
+    "items": [
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Main",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      },
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Main",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      },
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Main",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      },
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Extra",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      },
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Desert",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      },
+      {
+        "id": 1,
+        "name": "Name",
+        "category": "Desert",
+        "desc": "Description",
+        "price": "5.99",
+        "alergens": ["a1", "a2"],
+        "img": "images/default_food.jpg"
+      }
+    ]
+
+}
