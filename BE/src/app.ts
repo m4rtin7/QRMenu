@@ -89,7 +89,6 @@ app.use('/api/v1', v1())
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('../../FE/build'))
 }
-app.use(express.static('src/frontend/build'))
 
 // Errors
 app.use(errorMiddleware)
