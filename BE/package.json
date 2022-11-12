@@ -76,7 +76,7 @@
     "pg": "8.7.1",
     "rewiremock": "3.14.3",
     "sequelize": "6.9.0",
-    "sequelize-cli": "6.5.2",
+    "sequelize-cli": "6.3.0",
     "sharp": "0.30.1",
     "slugify": "1.6.2",
     "supertest": "6.1.6",
