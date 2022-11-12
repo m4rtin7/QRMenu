@@ -5,6 +5,6 @@
     "main": "server.js",
     "scripts": {
       "heroku-postbuild": "cd BE && npm run heroku-postbuild",
-      "start": "cd BE && cp .env.example .env && npm run"
+      "start": "cd BE && cp .env.example .env && npm run start"
     }
   }
