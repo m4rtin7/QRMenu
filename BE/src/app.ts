@@ -16,6 +16,7 @@ import isSameOrAfterPlugin from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBeforePlugin from 'dayjs/plugin/isSameOrBefore'
 import isoWeekPlugin from 'dayjs/plugin/isoWeek'
 import { cloneDeep } from 'lodash'
+import path from 'path'
 
 // middlewares
 import loggingMiddleware from './middlewares/loggingMiddleware'
@@ -87,7 +88,7 @@ passportUseSaml(app)
 app.use('/api/v1', v1())
 
 if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('../../FE/build'))
+	app.use(express.static(path.join(__dirname, '../../FE/qr-menu/build')))
 }
 
 // Errors
