@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+		"lib": ["es2021"],
+		"module": "CommonJS",
+		"target": "es2021",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"isolatedModules": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"resolveJsonModule": true,
+		"typeRoots" : [
+            "./src/types",
+            "node_modules/@types"
+        ]
+    },
+	"ts-node": {
+		"transpileOnly": true
+	},
+    "include": [
+		"./config/*",
+		"./src/**/*",
+		"./tests/**/*",
+		"./scripts/**/*",
+	],
+	"exclude": [
+		"node_modules"
+    ]
+}
