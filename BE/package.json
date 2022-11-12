@@ -30,7 +30,9 @@
     "debug": "npm-run-all -p todo-scanner translate-scanner debug:script",
     "type-check": "tsc --project tsconfig.json --noEmit",
     "joi-types": "ts-node scripts/joi-to-ts.ts",
-    "create-trigger-files": "ts-node scripts/create-log-triggers.ts"
+    "create-trigger-files": "ts-node scripts/create-log-triggers.ts",
+    "install-client": "cd ../FE/qr-menu && npm install",
+    "heroku-postbuild": "npm install && npm run install-client && npm run build"
   },
   "dependencies": {
     "@goodrequest/eslint-config-typescript": "1.2.0",

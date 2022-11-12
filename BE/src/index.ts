@@ -143,7 +143,7 @@ sequelize
 		console.log(`Unknown error has occurred: ${err}`.red)
 	})
 
-httpServer.listen(serverConfig.port).on('listening', () => {
+httpServer.listen(process.env.PORT || serverConfig.port).on('listening', () => {
 	console.log(`Server started in ${process.env.NODE_ENV} mode at port ${serverConfig.port}`.green)
 })
 
