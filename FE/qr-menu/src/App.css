@@ -10,10 +10,3 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
 }
-
-article {
-  margin: 1%;
-  width: 400px;
-  float: left;
-  border-style: solid;
-}

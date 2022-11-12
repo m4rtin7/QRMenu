@@ -2,9 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import data from "../data/menu.json";
 
 const initialState = {
-  menuItems: data.items,
+  menuItems: data.items.filter(
+    (item) => item.category === "Main"
+  ),
   allCategories: Array.from(new Set(data.items.map((item) => item.category))),
-  activeCategory: "",
+  activeCategory: "Main",
 };
 
 export const menuSlice = createSlice({
@@ -13,7 +15,7 @@ export const menuSlice = createSlice({
   reducers: {
     filter: (state, action) => {
       state.menuItems = data.items.filter(
-        (item) => item.category == action.payload
+        (item) => item.category === action.payload
       );
       state.activeCategory = action.payload;
     },

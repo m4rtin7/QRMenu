@@ -13,12 +13,12 @@ export default function Categories() {
   const categories = useSelector(selectCategories);
   const activeCategory = useSelector(selectActiveCategory);
   return (
-    <div className="categories-container">
+    <div className="categories-container" style={{margin:'20px'}}>
       <Nav justified pills>
         {categories.map((category, index) => {
           return (
             <NavItem onClick={() => dispatch(filter(category))} key={index}>
-              <NavLink active={category == activeCategory} href="#">
+              <NavLink active={category === activeCategory} href="#">
                 {category}
               </NavLink>
             </NavItem>
