@@ -16,14 +16,12 @@ import isSameOrAfterPlugin from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBeforePlugin from 'dayjs/plugin/isSameOrBefore'
 import isoWeekPlugin from 'dayjs/plugin/isoWeek'
 import { cloneDeep } from 'lodash'
+import path from 'path'
 
 // middlewares
 import loggingMiddleware from './middlewares/loggingMiddleware'
 import modelBuilderMiddleware from './middlewares/modelBuilderMiddleware'
 import errorMiddleware from './middlewares/errorMiddleware'
-
-// utils
-import { HOST } from './utils/enums'
 
 // API endpoints
 import v1 from './api/v1'
@@ -66,8 +64,9 @@ i18next
 const app = express()
 app.use('/apidoc', express.static('apidoc')) // NOTE: serve apidoc before helmet
 
-//Disable helmet if requested via env
-const testDeployMode = (process.env.TEST_DEPLOY_MODE == 'true' || process.env.TEST_DEPLOY_MODE == '1')
+// Disable helmet if requested via env
+// eslint-disable-next-line eqeqeq
+const testDeployMode = process.env.TEST_DEPLOY_MODE == 'true' || process.env.TEST_DEPLOY_MODE == '1'
 if (!testDeployMode) {
 	app.use(helmet())
 }
@@ -83,19 +82,16 @@ app.use(passport.initialize())
 app.use(i18nextMiddleware.handle(i18next))
 
 // add SAML SSO login
-passportUseSaml(app);
+passportUseSaml(app)
 
-//API
+// API
 app.use('/api/v1', v1())
 
-//Frontend
-//app.use(express.static('src/frontend/build'))
-//TODO Martin nastav na FR build
-app.use('*', (req, res) => {
-	res.sendFile(__dirname + '.../index.html');
-  });
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static(path.join(__dirname, '../../FE/qr-menu/build')))
+}
 
-//Errors
+// Errors
 app.use(errorMiddleware)
 
 export default app
