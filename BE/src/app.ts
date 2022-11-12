@@ -86,9 +86,9 @@ passportUseSaml(app)
 // API
 app.use('/api/v1', v1())
 
-// if (process.env.NODE_ENV === 'production') {
-app.use(express.static('../../FE/build'))
-// }
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static('../../FE/build'))
+}
 
 // Errors
 app.use(errorMiddleware)
