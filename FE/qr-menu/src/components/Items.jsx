@@ -14,7 +14,6 @@ import {
 export default function Items() {
   const menu = useSelector(selectMenu);
   const groupBySubcategory = _.groupBy(menu, "subcategory");
-  console.log(groupBySubcategory);
   return (
     <div className="items-container">
       {Object.entries(groupBySubcategory).map(([subcategory, items]) => {
