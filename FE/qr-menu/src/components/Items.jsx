@@ -1,19 +1,19 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { selectMenu } from "../features/menuSlice";
-import _ from "lodash";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectMenu } from '../features/menuSlice';
+import _ from 'lodash';
 import {
   Card,
   CardBody,
   CardTitle,
   CardSubtitle,
   CardText,
-  CardGroup,
-} from "reactstrap";
+  CardGroup
+} from 'reactstrap';
 
 export default function Items() {
   const menu = useSelector(selectMenu);
-  const groupBySubcategory = _.groupBy(menu, "subcategory");
+  const groupBySubcategory = _.groupBy(menu, 'subcategory');
   return (
     <div className="items-container">
       {Object.entries(groupBySubcategory).map(([subcategory, items]) => {
@@ -22,17 +22,17 @@ export default function Items() {
             <h4>{subcategory}</h4>
             <CardGroup key={subcategory}>
               {items.map((item) => {
-                const { id, name, cattegory, desc, price, alergens, img } =
+                const { id, name, category, desc, price, allergens, img } =
                   item;
                 return (
                   <div
                     key={id}
                     className="card-container"
-                    style={{ margin: "20px" }}
+                    style={{ margin: '20px' }}
                   >
                     <Card
                       style={{
-                        width: "18rem",
+                        width: '18rem'
                       }}
                     >
                       <img alt="Sample" src={img} />
