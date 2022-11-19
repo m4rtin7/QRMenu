@@ -201,3 +201,8 @@ export interface IWeatherForecastDailyItem extends IWeatherForecastHourlyItem {
 	temperatureMax: number
 	temperatureMin: number
 }
+
+export interface ILocalizedText {
+	sk?: string,
+	en?: string
+}

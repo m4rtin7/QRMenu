@@ -19,7 +19,7 @@ export const schema = Joi.object({
 	body: Joi.object({
 		email: Joi.string().max(255).required(),
 		password: Joi.string().max(255).required(),
-		extendedProfile: Joi.boolean().optional()
+		//extendedProfile: Joi.boolean().optional()
 	}),
 	query: Joi.object(),
 	params: Joi.object()

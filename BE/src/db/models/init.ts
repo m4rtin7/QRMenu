@@ -10,6 +10,8 @@ import defineFile from './file'
 import defineLanguage from './language'
 import defineLocalization from './localization'
 import defineLocalizationValue from './localizationValue'
+import defineMenuItem from './menuItem'
+import defineMenuItemCategory from './menuItemCategory'
 
 import defineFileLog from './logs/fileLog'
 import defineRoleLog from './logs/roleLog'
@@ -29,6 +31,8 @@ const modelsBuilder = (instance: Sequelize) => ({
 	Language: defineLanguage(instance, 'language'),
 	Localization: defineLocalization(instance, 'localization'),
 	LocalizationValue: defineLocalizationValue(instance, 'localizationValue'),
+	MenuItem: defineMenuItem(instance, 'menuItem'),
+	MenuItemCategory: defineMenuItemCategory(instance, 'menuItemCategory'),
 	
 	RoleLog: defineRoleLog(instance, 'roleLog'),
 	FileLog: defineFileLog(instance, 'fileLog'),

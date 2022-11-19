@@ -1,0 +1,2731 @@
+{
+	"openapi": "3.0.3",
+	"servers": [
+		{
+			"url": "http://localhost:3001"
+		}
+	],
+	"info": {
+		"description": "TMR datawarehouse BE",
+		"version": "0.0.1",
+		"title": "tmr_datawarehouse_backend",
+		"termsOfService": "http://swagger.io/terms/",
+		"contact": {
+			"email": ""
+		},
+		"license": {
+			"name": "MIT",
+			"url": ""
+		}
+	},
+	"paths": {
+		"/api/v1/files/*": {
+			"get": {
+				"tags": [
+					"Files"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "getApiV1Files",
+				"parameters": [],
+				"responses": {}
+			}
+		},
+		"/api/v1/authorization/ping": {
+			"post": {
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1AuthorizationPing",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"accessToken": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"accessToken"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/authorization/forgot-password": {
+			"post": {
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1AuthorizationForgotPassword",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"forgottenPasswordToken": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"forgottenPasswordToken",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"format": "email",
+										"maxLength": 255
+									}
+								},
+								"required": [
+									"email"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/authorization/reset-password": {
+			"post": {
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1AuthorizationResetPassword",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"password": {
+										"type": "string",
+										"pattern": "(?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)",
+										"maxLength": 255
+									}
+								},
+								"required": [
+									"password"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/confirm": {
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1UsersConfirm",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"surname": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"password": {
+										"type": "string",
+										"pattern": "(?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\\d+)",
+										"maxLength": 255
+									}
+								},
+								"required": [
+									"name",
+									"surname",
+									"password"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/files/": {
+			"post": {
+				"tags": [
+					"Files"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1Files",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										},
+										"file": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"displayName": {
+													"type": "string",
+													"maxLength": 255
+												},
+												"dataType": {
+													"type": "string",
+													"enum": [
+														"PDF",
+														"IMAGE",
+														"DOC",
+														"EXCEL",
+														"ZIP",
+														"RAR",
+														"OTHER"
+													]
+												},
+												"path": {
+													"type": "string",
+													"maxLength": 2000
+												},
+												"pathFileName": {
+													"type": "string",
+													"maxLength": 1000
+												},
+												"size": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"title": {
+													"type": "string",
+													"maxLength": 255,
+													"nullable": true
+												},
+												"altText": {
+													"type": "string",
+													"maxLength": 255,
+													"nullable": true
+												},
+												"description": {
+													"type": "string",
+													"maxLength": 500,
+													"nullable": true
+												},
+												"mimeType": {
+													"type": "string",
+													"maxLength": 255
+												}
+											},
+											"required": [
+												"id",
+												"displayName",
+												"dataType",
+												"path",
+												"pathFileName",
+												"size",
+												"title",
+												"altText",
+												"description",
+												"mimeType"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"messages",
+										"file"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"pathToFolder": {
+										"type": "string",
+										"maxLength": 1000
+									},
+									"title": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"altText": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"description": {
+										"type": "string",
+										"maxLength": 500
+									}
+								},
+								"required": [
+									"pathToFolder"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/menu-items/": {
+			"get": {
+				"tags": [
+					"Menu-items"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "getApiV1MenuItems",
+				"parameters": [
+					{
+						"name": "order",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 255,
+							"default": "name:asc"
+						},
+						"required": false
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"enum": [
+								25,
+								50,
+								100,
+								500,
+								1000,
+								5000,
+								25000
+							],
+							"default": 25000
+						},
+						"required": false
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"default": 1
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"menuItems": {
+											"type": "array",
+											"items": {
+												"type": "array",
+												"items": {
+													"type": "object",
+													"properties": {
+														"id": {
+															"type": "integer"
+														},
+														"name": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"id",
+														"name"
+													],
+													"additionalProperties": false
+												}
+											}
+										},
+										"pagination": {
+											"type": "object",
+											"properties": {
+												"limit": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"page": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"totalPages": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"totalCount": {
+													"type": "integer",
+													"minimum": 0
+												}
+											},
+											"required": [
+												"limit",
+												"page",
+												"totalPages",
+												"totalCount"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"menuItems",
+										"pagination"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Menu-items"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1MenuItems",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"menuItem": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer"
+												}
+											},
+											"additionalProperties": false
+										},
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"menuItem",
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"price": {
+										"type": "number",
+										"format": "float",
+										"minimum": 0
+									},
+									"categoryID": {
+										"type": "integer",
+										"minimum": 1
+									}
+								},
+								"required": [
+									"name",
+									"price",
+									"categoryID"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/menu-items/{menuItemID}": {
+			"patch": {
+				"tags": [
+					"Menu-items"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "patchApiV1MenuItemsMenuItemId",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"price": {
+										"type": "number",
+										"format": "float",
+										"minimum": 0
+									},
+									"categoryID": {
+										"type": "integer",
+										"minimum": 1
+									}
+								},
+								"required": [
+									"name",
+									"price",
+									"categoryID"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/authorization/login": {
+			"post": {
+				"tags": [
+					"Authorization"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1AuthorizationLogin",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"accessToken": {
+											"type": "string"
+										},
+										"extendedProfile": {
+											"type": "object",
+											"properties": {
+												"fullName": {
+													"type": "string",
+													"nullable": true
+												},
+												"id": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"name": {
+													"type": "string",
+													"nullable": true
+												},
+												"surname": {
+													"type": "string",
+													"nullable": true
+												},
+												"email": {
+													"type": "string"
+												},
+												"phone": {
+													"type": "string",
+													"nullable": true
+												},
+												"confirmedAt": {
+													"type": "string",
+													"format": "date-time",
+													"nullable": true
+												},
+												"deletedAt": {
+													"type": "string",
+													"format": "date-time",
+													"nullable": true
+												},
+												"lastLoginAt": {
+													"type": "string",
+													"format": "date-time",
+													"nullable": true
+												},
+												"lastTokenAt": {
+													"type": "string",
+													"format": "date-time",
+													"nullable": true
+												},
+												"resorts": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"id": {
+																"type": "integer",
+																"minimum": 1
+															},
+															"name": {
+																"type": "string"
+															},
+															"roles": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"id": {
+																			"type": "integer",
+																			"minimum": 1
+																		},
+																		"name": {
+																			"type": "string"
+																		},
+																		"permissions": {
+																			"type": "array",
+																			"items": {
+																				"type": "object",
+																				"properties": {
+																					"key": {
+																						"type": "string"
+																					},
+																					"groupKey": {
+																						"type": "string"
+																					}
+																				},
+																				"required": [
+																					"key",
+																					"groupKey"
+																				],
+																				"additionalProperties": false
+																			}
+																		}
+																	},
+																	"required": [
+																		"id",
+																		"name",
+																		"permissions"
+																	],
+																	"additionalProperties": false
+																}
+															}
+														},
+														"required": [
+															"id",
+															"name",
+															"roles"
+														],
+														"additionalProperties": false
+													}
+												}
+											},
+											"required": [
+												"fullName",
+												"id",
+												"name",
+												"surname",
+												"email",
+												"phone",
+												"confirmedAt",
+												"deletedAt",
+												"lastLoginAt",
+												"lastTokenAt",
+												"resorts"
+											],
+											"additionalProperties": false
+										},
+										"profile": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"fullname": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"id",
+												"fullname"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"accessToken",
+										"profile"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"password": {
+										"type": "string",
+										"maxLength": 255
+									}
+								},
+								"required": [
+									"email",
+									"password"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/": {
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_LIST]",
+				"operationId": "getApiV1Users",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					},
+					{
+						"name": "roleID",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": false
+					},
+					{
+						"name": "search",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 100,
+							"nullable": true
+						},
+						"required": false
+					},
+					{
+						"name": "order",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 255,
+							"default": "fullName:asc"
+						},
+						"required": false
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"enum": [
+								25,
+								50,
+								100,
+								500,
+								1000,
+								5000,
+								25000
+							],
+							"default": 25000
+						},
+						"required": false
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"default": 1
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"users": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "integer",
+														"minimum": 1
+													},
+													"fullName": {
+														"type": "string"
+													},
+													"email": {
+														"type": "string"
+													},
+													"confirmedAt": {
+														"type": "string",
+														"format": "date-time",
+														"nullable": true
+													},
+													"last": {
+														"type": "string",
+														"format": "date-time",
+														"nullable": true
+													},
+													"lastLoginAt": {
+														"type": "string",
+														"format": "date-time",
+														"nullable": true
+													},
+													"lastTokenAt": {
+														"type": "string",
+														"format": "date-time",
+														"nullable": true
+													},
+													"deletedAt": {
+														"type": "string",
+														"format": "date-time",
+														"nullable": true
+													},
+													"phone": {
+														"type": "string",
+														"nullable": true
+													},
+													"resorts": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"id": {
+																	"type": "integer",
+																	"minimum": 1
+																},
+																"name": {
+																	"type": "string"
+																},
+																"roles": {
+																	"type": "array",
+																	"items": {
+																		"type": "object",
+																		"properties": {
+																			"id": {
+																				"type": "integer",
+																				"minimum": 1
+																			},
+																			"name": {
+																				"type": "string"
+																			}
+																		},
+																		"required": [
+																			"id",
+																			"name"
+																		],
+																		"additionalProperties": false
+																	}
+																}
+															},
+															"required": [
+																"id",
+																"name",
+																"roles"
+															],
+															"additionalProperties": false
+														}
+													}
+												},
+												"required": [
+													"id",
+													"fullName",
+													"email",
+													"confirmedAt",
+													"last",
+													"lastLoginAt",
+													"lastTokenAt",
+													"deletedAt",
+													"phone",
+													"resorts"
+												],
+												"additionalProperties": false
+											}
+										},
+										"pagination": {
+											"type": "object",
+											"properties": {
+												"limit": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"page": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"totalPages": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"totalCount": {
+													"type": "integer",
+													"minimum": 0
+												}
+											},
+											"required": [
+												"limit",
+												"page",
+												"totalPages",
+												"totalCount"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"users",
+										"pagination"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]",
+				"operationId": "postApiV1Users",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										},
+										"user": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"minimum": 1
+												}
+											},
+											"required": [
+												"id"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"messages",
+										"user"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"format": "email",
+										"maxLength": 255
+									},
+									"name": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"surname": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"phone": {
+										"type": "string",
+										"maxLength": 100,
+										"nullable": true
+									}
+								},
+								"required": [
+									"email",
+									"name",
+									"surname",
+									"phone"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userID}": {
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT, USER_LIST]",
+				"operationId": "getApiV1UsersUserId",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					},
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"fullName": {
+											"type": "string",
+											"nullable": true
+										},
+										"id": {
+											"type": "integer",
+											"minimum": 1
+										},
+										"name": {
+											"type": "string",
+											"nullable": true
+										},
+										"surname": {
+											"type": "string",
+											"nullable": true
+										},
+										"email": {
+											"type": "string"
+										},
+										"phone": {
+											"type": "string",
+											"nullable": true
+										},
+										"confirmedAt": {
+											"type": "string",
+											"format": "date-time",
+											"nullable": true
+										},
+										"deletedAt": {
+											"type": "string",
+											"format": "date-time",
+											"nullable": true
+										},
+										"lastLoginAt": {
+											"type": "string",
+											"format": "date-time",
+											"nullable": true
+										},
+										"lastTokenAt": {
+											"type": "string",
+											"format": "date-time",
+											"nullable": true
+										},
+										"resorts": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "integer",
+														"minimum": 1
+													},
+													"name": {
+														"type": "string"
+													},
+													"roles": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"id": {
+																	"type": "integer",
+																	"minimum": 1
+																},
+																"name": {
+																	"type": "string"
+																},
+																"permissions": {
+																	"type": "array",
+																	"items": {
+																		"type": "object",
+																		"properties": {
+																			"key": {
+																				"type": "string"
+																			},
+																			"groupKey": {
+																				"type": "string"
+																			}
+																		},
+																		"required": [
+																			"key",
+																			"groupKey"
+																		],
+																		"additionalProperties": false
+																	}
+																}
+															},
+															"required": [
+																"id",
+																"name",
+																"permissions"
+															],
+															"additionalProperties": false
+														}
+													}
+												},
+												"required": [
+													"id",
+													"name",
+													"roles"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"fullName",
+										"id",
+										"name",
+										"surname",
+										"email",
+										"phone",
+										"confirmedAt",
+										"deletedAt",
+										"lastLoginAt",
+										"lastTokenAt",
+										"resorts"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]",
+				"operationId": "patchApiV1UsersUserId",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					},
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"surname": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"email": {
+										"type": "string",
+										"format": "email",
+										"maxLength": 255
+									},
+									"phone": {
+										"type": "string",
+										"maxLength": 100,
+										"nullable": true
+									}
+								},
+								"required": [
+									"name",
+									"surname",
+									"email",
+									"phone"
+								]
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]",
+				"operationId": "deleteApiV1UsersUserId",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					},
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userID}/assign-roles": {
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "postApiV1UsersUserIdAssignRoles",
+				"parameters": [
+					{
+						"name": "x-resortID",
+						"in": "header",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						},
+						"required": true
+					},
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"resorts": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"resortID": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"roleID": {
+													"type": "integer",
+													"minimum": 1
+												}
+											},
+											"required": [
+												"resortID",
+												"roleID"
+											],
+											"additionalProperties": false
+										}
+									},
+									"permissions": {
+										"type": "array",
+										"items": {
+											"type": "string",
+											"enum": [
+												"SUPER_ADMIN",
+												"ADMIN",
+												"USER",
+												"USER_CREATE",
+												"USER_EDIT",
+												"USER_DELETE",
+												"USER_LIST",
+												"RESORT_READ",
+												"RESORT_WRITE",
+												"SKILIFT_READ",
+												"SKILIFT_WRITE",
+												"SLOPE_READ",
+												"SLOPE_WRITE",
+												"BIKE_READ",
+												"BIKE_WRITE",
+												"CROSS_COUNTRY_READ",
+												"CROSS_COUNTRY_WRITE",
+												"THEME_PARK_READ",
+												"THEME_PARK_WRITE",
+												"AQUAPARK_POOL_READ",
+												"AQUAPARK_POOL_WRITE",
+												"AQUAPARK_ATTRACTION_READ",
+												"AQUAPARK_ATTRACTION_WRITE",
+												"SERVICE_READ",
+												"SERVICE_WRITE",
+												"ACCOMMODATION_READ",
+												"ACCOMMODATION_WRITE",
+												"RESTAURANT_READ",
+												"RESTAURANT_WRITE",
+												"EVENT_READ",
+												"EVENT_WRITE",
+												"CAMERA_READ",
+												"CAMERA_WRITE",
+												"DEPARTURE_READ",
+												"DEPARTURE_WRITE",
+												"INFO_READ",
+												"INFO_WRITE",
+												"WEATHER_READ",
+												"WEATHER_WRITE",
+												"PARKING_READ",
+												"PARKING_WRITE",
+												"ACCESSORY_WRITE",
+												"LOCATION_WRITE",
+												"LOCATION_READ"
+											]
+										}
+									}
+								},
+								"required": [
+									"resorts",
+									"permissions"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userID}/resend-registration-email": {
+			"patch": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]",
+				"operationId": "patchApiV1UsersUserIdResendRegistrationEmail",
+				"parameters": [
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userID}/send-reset-password-email": {
+			"patch": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]",
+				"operationId": "patchApiV1UsersUserIdSendResetPasswordEmail",
+				"parameters": [
+					{
+						"name": "userID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/roles/": {
+			"get": {
+				"tags": [
+					"Roles"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "getApiV1Roles",
+				"parameters": [
+					{
+						"name": "api_key",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"required": false
+					},
+					{
+						"name": "includePermissions",
+						"in": "query",
+						"schema": {
+							"type": "boolean"
+						},
+						"required": false
+					},
+					{
+						"name": "order",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 255,
+							"default": "id:asc"
+						},
+						"required": false
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"enum": [
+								25,
+								50,
+								100,
+								500,
+								1000,
+								5000,
+								25000
+							],
+							"default": 25000
+						},
+						"required": false
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"default": 1
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"roles": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "integer"
+													},
+													"name": {
+														"type": "string"
+													},
+													"permissions": {
+														"type": "array",
+														"items": {
+															"type": "object",
+															"properties": {
+																"key": {
+																	"type": "string"
+																},
+																"groupKey": {
+																	"type": "string"
+																}
+															},
+															"required": [
+																"key",
+																"groupKey"
+															],
+															"additionalProperties": false
+														}
+													}
+												},
+												"required": [
+													"id",
+													"name"
+												],
+												"additionalProperties": false
+											}
+										},
+										"pagination": {
+											"type": "object",
+											"properties": {
+												"limit": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"page": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"totalPages": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"totalCount": {
+													"type": "integer",
+													"minimum": 0
+												}
+											},
+											"required": [
+												"limit",
+												"page",
+												"totalPages",
+												"totalCount"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"roles",
+										"pagination"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Roles"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "postApiV1Roles",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"role": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer"
+												}
+											},
+											"additionalProperties": false
+										},
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"role",
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"permissions": {
+										"type": "array",
+										"items": {
+											"type": "string",
+											"enum": [
+												"SUPER_ADMIN",
+												"ADMIN",
+												"USER",
+												"USER_CREATE",
+												"USER_EDIT",
+												"USER_DELETE",
+												"USER_LIST",
+												"RESORT_READ",
+												"RESORT_WRITE",
+												"SKILIFT_READ",
+												"SKILIFT_WRITE",
+												"SLOPE_READ",
+												"SLOPE_WRITE",
+												"BIKE_READ",
+												"BIKE_WRITE",
+												"CROSS_COUNTRY_READ",
+												"CROSS_COUNTRY_WRITE",
+												"THEME_PARK_READ",
+												"THEME_PARK_WRITE",
+												"AQUAPARK_POOL_READ",
+												"AQUAPARK_POOL_WRITE",
+												"AQUAPARK_ATTRACTION_READ",
+												"AQUAPARK_ATTRACTION_WRITE",
+												"SERVICE_READ",
+												"SERVICE_WRITE",
+												"ACCOMMODATION_READ",
+												"ACCOMMODATION_WRITE",
+												"RESTAURANT_READ",
+												"RESTAURANT_WRITE",
+												"EVENT_READ",
+												"EVENT_WRITE",
+												"CAMERA_READ",
+												"CAMERA_WRITE",
+												"DEPARTURE_READ",
+												"DEPARTURE_WRITE",
+												"INFO_READ",
+												"INFO_WRITE",
+												"WEATHER_READ",
+												"WEATHER_WRITE",
+												"PARKING_READ",
+												"PARKING_WRITE",
+												"ACCESSORY_WRITE",
+												"LOCATION_WRITE",
+												"LOCATION_READ"
+											]
+										}
+									}
+								},
+								"required": [
+									"name",
+									"permissions"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/roles/{roleID}": {
+			"get": {
+				"tags": [
+					"Roles"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "getApiV1RolesRoleId",
+				"parameters": [
+					{
+						"name": "roleID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "api_key",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"required": false
+					},
+					{
+						"name": "includePermissions",
+						"in": "query",
+						"schema": {
+							"type": "boolean"
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"role": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer"
+												},
+												"name": {
+													"type": "string"
+												},
+												"permissions": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"key": {
+																"type": "string"
+															},
+															"groupKey": {
+																"type": "string"
+															}
+														},
+														"required": [
+															"key",
+															"groupKey"
+														],
+														"additionalProperties": false
+													}
+												}
+											},
+											"required": [
+												"id",
+												"name"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"role"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": [
+					"Roles"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "patchApiV1RolesRoleId",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"name": {
+										"type": "string",
+										"maxLength": 255
+									},
+									"permissions": {
+										"type": "array",
+										"items": {
+											"type": "string",
+											"enum": [
+												"SUPER_ADMIN",
+												"ADMIN",
+												"USER",
+												"USER_CREATE",
+												"USER_EDIT",
+												"USER_DELETE",
+												"USER_LIST",
+												"RESORT_READ",
+												"RESORT_WRITE",
+												"SKILIFT_READ",
+												"SKILIFT_WRITE",
+												"SLOPE_READ",
+												"SLOPE_WRITE",
+												"BIKE_READ",
+												"BIKE_WRITE",
+												"CROSS_COUNTRY_READ",
+												"CROSS_COUNTRY_WRITE",
+												"THEME_PARK_READ",
+												"THEME_PARK_WRITE",
+												"AQUAPARK_POOL_READ",
+												"AQUAPARK_POOL_WRITE",
+												"AQUAPARK_ATTRACTION_READ",
+												"AQUAPARK_ATTRACTION_WRITE",
+												"SERVICE_READ",
+												"SERVICE_WRITE",
+												"ACCOMMODATION_READ",
+												"ACCOMMODATION_WRITE",
+												"RESTAURANT_READ",
+												"RESTAURANT_WRITE",
+												"EVENT_READ",
+												"EVENT_WRITE",
+												"CAMERA_READ",
+												"CAMERA_WRITE",
+												"DEPARTURE_READ",
+												"DEPARTURE_WRITE",
+												"INFO_READ",
+												"INFO_WRITE",
+												"WEATHER_READ",
+												"WEATHER_WRITE",
+												"PARKING_READ",
+												"PARKING_WRITE",
+												"ACCESSORY_WRITE",
+												"LOCATION_WRITE",
+												"LOCATION_READ"
+											]
+										}
+									}
+								},
+								"required": [
+									"name",
+									"permissions"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/logs/": {
+			"get": {
+				"tags": [
+					"Logs"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "getApiV1Logs",
+				"parameters": [
+					{
+						"name": "api_key",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"required": false
+					},
+					{
+						"name": "searchName",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 100,
+							"nullable": true
+						},
+						"required": false
+					},
+					{
+						"name": "searchTable",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 100,
+							"nullable": true
+						},
+						"required": false
+					},
+					{
+						"name": "searchFullText",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 100,
+							"nullable": true
+						},
+						"required": false
+					},
+					{
+						"name": "order",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 255,
+							"default": "id:desc"
+						},
+						"required": false
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"enum": [
+								25,
+								50,
+								100,
+								500,
+								1000,
+								5000,
+								25000
+							],
+							"default": 25000
+						},
+						"required": false
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"default": 1
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"logs": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"id": {
+														"type": "integer"
+													},
+													"userName": {
+														"type": "string"
+													},
+													"timestamp": {
+														"type": "string"
+													},
+													"tableName": {
+														"type": "string"
+													},
+													"operation": {
+														"type": "string",
+														"enum": [
+															"INSERT",
+															"UPDATE",
+															"DELETE",
+															"RESTORE"
+														]
+													}
+												},
+												"required": [
+													"id",
+													"userName",
+													"timestamp",
+													"tableName",
+													"operation"
+												],
+												"additionalProperties": false
+											}
+										},
+										"pagination": {
+											"type": "object",
+											"properties": {
+												"limit": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"page": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"totalPages": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"totalCount": {
+													"type": "integer",
+													"minimum": 0
+												}
+											},
+											"required": [
+												"limit",
+												"page",
+												"totalPages",
+												"totalCount"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"logs",
+										"pagination"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/logs/{logID}": {
+			"get": {
+				"tags": [
+					"Logs"
+				],
+				"security": [],
+				"summary": "PERMISSION: [SUPER_ADMIN, ADMIN]",
+				"operationId": "getApiV1LogsLogId",
+				"parameters": [
+					{
+						"name": "logID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer"
+						}
+					},
+					{
+						"name": "api_key",
+						"in": "query",
+						"schema": {
+							"type": "string"
+						},
+						"required": false
+					},
+					{
+						"name": "order",
+						"in": "query",
+						"schema": {
+							"type": "string",
+							"maxLength": 255,
+							"default": "id:asc"
+						},
+						"required": false
+					},
+					{
+						"name": "limit",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"enum": [
+								25,
+								50,
+								100,
+								500,
+								1000,
+								5000,
+								25000
+							],
+							"default": 25000
+						},
+						"required": false
+					},
+					{
+						"name": "page",
+						"in": "query",
+						"schema": {
+							"type": "integer",
+							"minimum": 1,
+							"default": 1
+						},
+						"required": false
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"log": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer"
+												},
+												"userName": {
+													"type": "string"
+												},
+												"timestamp": {
+													"type": "string"
+												},
+												"tableName": {
+													"type": "string"
+												},
+												"operation": {
+													"type": "string",
+													"enum": [
+														"INSERT",
+														"UPDATE",
+														"DELETE",
+														"RESTORE"
+													]
+												},
+												"newValue": {
+													"type": "string",
+													"nullable": true
+												},
+												"oldValue": {
+													"type": "string",
+													"nullable": true
+												}
+											},
+											"required": [
+												"id",
+												"userName",
+												"timestamp",
+												"tableName",
+												"operation",
+												"newValue",
+												"oldValue"
+											],
+											"additionalProperties": false
+										},
+										"pagination": {
+											"type": "object",
+											"properties": {
+												"limit": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"page": {
+													"type": "integer",
+													"minimum": 1
+												},
+												"totalPages": {
+													"type": "integer",
+													"minimum": 0
+												},
+												"totalCount": {
+													"type": "integer",
+													"minimum": 0
+												}
+											},
+											"required": [
+												"limit",
+												"page",
+												"totalPages",
+												"totalCount"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"log",
+										"pagination"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"externalDocs": {
+		"description": "Find out more about Swagger",
+		"url": "http://swagger.io"
+	},
+	"components": {
+		"securitySchemes": {}
+	},
+	"security": []
+}
