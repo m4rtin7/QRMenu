@@ -1,0 +1,26 @@
+.add-icon {
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  margin-left: 24px;
+}
+
+.edit-button {
+  padding-bottom: 24px;
+  width: 170px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.categories-container {
+  display: block;
+}
+
+.categories-container a:first-child {
+  display: inline-block;
+  width: 70% !important;
+}
+.categories-container a:nth-child(2) {
+  display: inline-block;
+  width: 30%;
+}
