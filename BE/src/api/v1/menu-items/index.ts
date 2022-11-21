@@ -10,7 +10,7 @@ import * as postMenuItem from './post.menuItem'
 import * as patchMenuItem from './patch.menuItem'
 //import * as deletemMenuItem from './delete.menuItem'
 
-const router = Router()
+const router = Router({ mergeParams: true })
 
 export default () => {
 	router.get(

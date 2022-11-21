@@ -12,10 +12,14 @@ export const schema = Joi.object({
     body: Joi.object({
         name: Joi.string().required(),
 		price: Joi.number().min(0).required(),
-        categoryID: Joi.number().integer().required().min(1)
+        categoryID: Joi.number().integer().required().min(1),
+        photoID: Joi.number().integer().optional().min(1),
+        allergenIDs: Joi.array().items(Joi.number().integer().min(0)).required(),
     }),
     query: Joi.object(),
-    params: Joi.object()
+    params: Joi.object({
+        restaurantID: Joi.number().integer().min(1).required()
+    })
 })
 
 export const responseSchema = fullMessagesResponse
@@ -24,7 +28,7 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
     let transaction
     try {
         const { models, body, params, user: authUser } = req
-        const { File, MenuItem, MenuItemCategory } = models
+        const { File, MenuItem, MenuItemCategory, Restaurant, Allergen, MenuItemAllergen } = models
 
         let data = {
             name: body.name,
@@ -32,11 +36,47 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             categoryID: body.categoryID,
         }
 
+        const restaurant = await Restaurant.findOne({
+            where: {
+                id: {
+                    [Op.eq]: params.restaurantID
+                }
+            }
+        })
+
+        if (!restaurant) {
+            throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nebola naidena`))
+        }
+        if (restaurant.ownedBy !== authUser.id) {
+            throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nepatri prihlasenmu uzivatelovi`))
+        }
+
 		const foundMenuItem = await MenuItem.findByPk(parseInt(params.menuItemID, 10))
 
 		if (!foundMenuItem) {
 			throw new ErrorBuilder(404, req.t('error:Polozka menu nebola nájdená'))
 		}
+
+        const allergensIDs = uniq(body.allergenIDs) as number[]
+        if (!isEmpty(allergensIDs)) {
+            const allergens = await Allergen.findAll({
+                where: {
+                    id: {
+                        [Op.in]: allergensIDs
+                    }
+                }
+            })
+
+            if (allergens.length != allergensIDs.length) {
+                throw new ErrorBuilder(404, req.t('error:Alergen nebolo nájdené'))
+            }
+
+            const accessoriesData = map(allergensIDs, (allergenID) => ({
+                allergenID,
+                menuItemID: foundMenuItem.id
+            }))
+            await MenuItemAllergen.bulkCreate(accessoriesData, { transaction })
+        }
 
         const category = await MenuItemCategory.findOne({
             where: {

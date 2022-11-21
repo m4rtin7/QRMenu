@@ -9,6 +9,9 @@ import { createSlug } from '../../../utils/helper'
 import { causeSchema, localizedValueSchema, openingHoursSchema, paginationResponse } from '../../../utils/joiSchemas'
 import { IServerConfig } from '../../../types/interfaces'
 import { getPhotoFullPath } from '../../../utils/photoUtil'
+import restaurant from '../../../db/models/restaurant'
+import ErrorBuilder from '../../../utils/ErrorBuilder'
+import allergens from '../allergens'
 
 const serverConfig: IServerConfig = config.get('server')
 
@@ -19,7 +22,9 @@ export const schema = Joi.object({
         limit: Joi.number().integer().valid(25, 50, 100, 500, 1000, 5000, 25000).default(25000).optional(),
         page: Joi.number().integer().min(1).default(1).optional(),
     }),
-    params: Joi.object()
+    params: Joi.object({
+        restaurantID: Joi.number().integer().min(1).required()
+    })
 })
 
 export const responseSchema = Joi.object({
@@ -28,6 +33,24 @@ export const responseSchema = Joi.object({
             Joi.array().items({
                 id: Joi.number().integer().required(),
                 name: Joi.string().required(),
+                price: Joi.number().integer().required(),
+                description: Joi.string().required(),
+                restaurantID: Joi.number().integer().required(),
+                categoryID: Joi.number().integer().required(),
+                menuItemCategory: Joi.object({
+                    id: Joi.number().integer().required(),
+                    name: Joi.string().required(),
+                }).required(),
+                allergens: Joi.array().items({
+                    id: Joi.number().integer().required(),
+                    name: Joi.string().required(),
+                    description: Joi.string().optional()
+                }),
+                image: Joi.object({
+                    pathToFolder: Joi.string().max(1000).required(),
+                    title: Joi.string().max(255).optional(),
+                    altText: Joi.string().max(255).optional(),
+                    description: Joi.string().max(500).optional()}).optional()
             })
         )
         .required(),
@@ -36,8 +59,8 @@ export const responseSchema = Joi.object({
 
 export const workflow = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { models, query } = req
-        const { MenuItem, MenuItemCategory, File } = models
+        const { models, query, params} = req
+        const { MenuItem, MenuItemCategory, File, Restaurant, Allergen } = models
 
         const { limit } = query
         const offset = query.page * limit - limit
@@ -56,20 +79,50 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             [Op.and]: []
         }
 
+        const restaurant = await Restaurant.findOne({
+            where: {
+                id: {
+                    [Op.eq]: params.restaurantID
+                }
+            }
+        })
+
+        if (!restaurant) {
+            throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nebola nájdena`))
+        }
+
+
         const result = await MenuItem.findAndCountAll({
             order,
             include: [
                 {
                     model: MenuItemCategory,
-                    attributes: [ 'name'],
+                    attributes: [ 'id','name'],
+                },
+                {
+                    model: Allergen,
+                    attributes: [ 'id','name', 'description'],
                 },
                 {
                     model: File,
                     attributes: ['id', 'name', 'path'],
                     as: 'image',
                 }
-            ]
+            ],
+            where: {
+                restaurantID: {
+                    [Op.eq]: params.restaurantID
+                }
+            }
         })
+
+        // const menuItems: map(result.rows.allergens, (allergen) => {
+        //     return {
+        //         id: allergen.id,
+        //         name: allergen.name
+        //         description: allergen.description
+        //     }
+        // }),
 
         const menuItems = result.rows
 

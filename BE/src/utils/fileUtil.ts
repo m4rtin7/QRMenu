@@ -40,7 +40,7 @@ interface FileWriteArgs {
 export const fileWriteToStorage = async (args: FileWriteArgs) => {
     let transaction: Transaction;
     try {
-        const { File, FileAlternative } = args.models
+        const { File,  } = args.models
         const t = args.t || i18next.t;
         const { file } = args;
 
@@ -49,6 +49,9 @@ export const fileWriteToStorage = async (args: FileWriteArgs) => {
         if (relativePath !== '/') {
             relativePath = `${relativePath}/`
         }
+
+        console.log(file);
+        
 
         const { ext, nameWithoutPostfix } = getFileNamePostfixIndexMetadata(file.originalname)
 
@@ -133,10 +136,6 @@ export const fileWriteToStorage = async (args: FileWriteArgs) => {
                 }
             })
 
-            const newFileAlternativesData = await Promise.all(promises)
-            if (newFileAlternativesData.length > 0) {
-                await FileAlternative.bulkCreate(newFileAlternativesData, { transaction })
-            }
         }
 
         await transaction.commit()

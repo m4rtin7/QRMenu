@@ -31,9 +31,9 @@ const usersData = [
 		confirmedAt: now
 	},
 	{
-		name: 'Adam',
-		surname: 'Gon',
-		email: 'adagon001@gmail.com',
+		name: 'Test',
+		surname: 'User',
+		email: 'tuser@gmail.com',
 		hash,
 		confirmedAt: now
 	},
