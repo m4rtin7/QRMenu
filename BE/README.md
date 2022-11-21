@@ -16,6 +16,12 @@
 | EMAIL_PORT     | optional    | required   | email server port                             |
 | EMAIL_FROM     | optional    | required   | The e-mail address of the sender              |
 
+User for test login:
+{
+email: 'tuser@gmail.com',
+password: 'Matfyz123.'
+}
+
 ### Log files
 
 1.  **INFO- logs all requests**
