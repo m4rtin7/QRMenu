@@ -30,6 +30,10 @@ import EditIcon from './images/edit.svg';
 
 export default function Items() {
   const [openedModal, setOpenedModal] = useState(null);
+  const [prodName, setProdName] = useState('');
+  const [priceValue, setPriceValue] = useState('');
+  const [description, setDescription] = useState('');
+
   const dispatch = useDispatch();
   const menu = useSelector(selectMenu);
   const groupBySubcategory = _.groupBy(menu, 'subcategory');
@@ -79,7 +83,12 @@ export default function Items() {
                               cursor: 'pointer'
                             }}
                             alt="Edit Icon"
-                            onClick={() => openModal(id)}
+                            onClick={() => {
+                              openModal(id);
+                              setProdName(name);
+                              setPriceValue(price);
+                              setDescription(desc);
+                            }}
                             id={`${id}_${name}`}
                           />
                           <Modal
@@ -132,19 +141,25 @@ export default function Items() {
                                 <Row>
                                   <Col>
                                     <span>Dish name</span>
-                                    <input
+                                    <Input
                                       id="dish-name"
-                                      style={{ width: '100%' }}
-                                      value={name}
+                                      value={prodName}
+                                      type="text"
+                                      onChange={(event) =>
+                                        setProdName(event.target.value)
+                                      }
                                     />
                                   </Col>
                                   <Col>
                                     <span>
                                       Price:{' '}
-                                      <input
+                                      <Input
                                         id="price"
                                         type="number"
-                                        value={price}
+                                        value={priceValue}
+                                        onChange={(event) =>
+                                          setPriceValue(event.target.value)
+                                        }
                                       />
                                     </span>
                                   </Col>
@@ -161,11 +176,14 @@ export default function Items() {
                                 })}
                                 <br />
                                 <span>Description</span>
-                                <textarea
+                                <Input
                                   id="description"
-                                  style={{ width: '100%' }}
+                                  type="textarea"
                                   rows="4"
-                                  value={desc}
+                                  value={description}
+                                  onChange={(event) =>
+                                    setDescription(event.target.value)
+                                  }
                                 />
                                 <Label for="exampleFile">File</Label>
                                 <Input
@@ -203,10 +221,11 @@ export default function Items() {
                                     dishName,
                                     description,
                                     price,
-                                    allergens: []
+                                    allergens: [],
+                                    img
                                   };
                                   dispatch(editProduct(item));
-                                  toggle();
+                                  closeModal();
                                 }}
                               >
                                 Save
