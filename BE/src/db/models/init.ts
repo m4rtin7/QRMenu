@@ -8,6 +8,9 @@ import defineRolePermission from './rolePermission'
 import defineUserRole from './userRole'
 import defineFile from './file'
 import defineLanguage from './language'
+import defineRestaurant from './restaurant'
+import defineAllergen from './allergen'
+import defineMenuItemAllergen from './MenuItemAlergen'
 import defineLocalization from './localization'
 import defineLocalizationValue from './localizationValue'
 import defineMenuItem from './menuItem'
@@ -33,6 +36,9 @@ const modelsBuilder = (instance: Sequelize) => ({
 	LocalizationValue: defineLocalizationValue(instance, 'localizationValue'),
 	MenuItem: defineMenuItem(instance, 'menuItem'),
 	MenuItemCategory: defineMenuItemCategory(instance, 'menuItemCategory'),
+	Restaurant: defineRestaurant(instance, 'restaurant'),
+	Allergen: defineAllergen(instance, 'allergen'),
+	MenuItemAllergen: defineMenuItemAllergen(instance, 'menuItemAllergen'),
 	
 	RoleLog: defineRoleLog(instance, 'roleLog'),
 	FileLog: defineFileLog(instance, 'fileLog'),

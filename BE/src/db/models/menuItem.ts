@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize, UpdateOptions } from 'sequelize'
 import { ILocalizedText } from '../../types/interfaces'
+import { AllergenModel } from './allergen'
 
 export class MenuItemModel extends Model {
 	id: number
@@ -8,6 +9,7 @@ export class MenuItemModel extends Model {
 	description: number
 	informationLocalization: ILocalizedText
     nameLocalization: ILocalizedText
+	allergens: AllergenModel[]
 }
 export default (sequelize: Sequelize, modelName: string) => {
 	MenuItemModel.init(
@@ -55,8 +57,16 @@ export default (sequelize: Sequelize, modelName: string) => {
 
 	MenuItemModel.associate = (models) => {
 		MenuItemModel.belongsTo(models.User, { as: 'creator', foreignKey: 'createdBy' })
+		MenuItemModel.belongsTo(models.Restaurant, { foreignKey: 'restaurantID' })
 		MenuItemModel.belongsTo(models.MenuItemCategory, { foreignKey: 'categoryID' })
 		MenuItemModel.belongsTo(models.File, { as: 'image', foreignKey: 'imageID' })
+		MenuItemModel.belongsToMany(models.Allergen, {
+			foreignKey: 'menuItemID',
+			through: {
+				model: models.MenuItemAllergen,
+				unique: true
+			}
+		})
 	}
 
 	return MenuItemModel

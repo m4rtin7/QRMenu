@@ -5,8 +5,9 @@ import bcrypt from 'bcrypt'
 import { models } from '../../models'
 
 // utils
-import { SYSTEM_USER, PERMISSION, SUPER_ADMIN_EMAIL } from '../../../utils/enums'
+import { SYSTEM_USER, PERMISSION, SUPER_ADMIN_EMAIL, DAYS } from '../../../utils/enums'
 import { MenuItemModel } from '../../models/menuItem'
+import { IOpeningHours } from '../../models/restaurant'
 
 // false or console.log
 const logging = false
@@ -76,9 +77,21 @@ const MenuItemsData = [
     }
   ]
 
+  const testRestaurant = {
+    city: "Bratislava",
+    address: "Zochova 45",
+    zipCode: "03108",
+    phone: "+421906785",
+    contactPerson: "Robo Struk",
+    websiteURL: "https://qrmenu-asdit.herokuapp.com/1",
+    menuURL: "https://qrmenu-asdit.herokuapp.com/1",
+    // foreign keys
+    ownedBy: 4
+  }
+
 export async function up() {
 	try {
-		const { User, MenuItem, MenuItemCategory  } = models
+		const { User, MenuItem, MenuItemCategory, Restaurant } = models
 
 		const systemUser = 
 			await User.findOne({
@@ -88,6 +101,13 @@ export async function up() {
 				},
 				logging
 			})
+
+      const restaurant = await Restaurant.create(testRestaurant, {
+        logging,
+        applicationLogging: false
+    })
+
+    restaurant.openingHours = seedReportParseOpeningHours(["9:00","15:00"]);
 
 
         const menuItemsCategories = uniq(map(MenuItemsData, (item) => ({
@@ -105,6 +125,7 @@ export async function up() {
             description: item.desc,
             categoryID: createdCategories.find( e => e.name === item.category).id || null,
 			price: item.price || null,
+      restaurantID: restaurant.id,
 			createdBy: systemUser.id
 		}))
 
@@ -121,4 +142,35 @@ export async function up() {
 
 export function down() {
 	throw new Error('Not implemented fuction')
+}
+
+export const seedReportParseOpeningHours = (openingHours: string[]): IOpeningHours[] => {
+  if (openingHours == null || openingHours.length == 0) {
+      return null;
+  }
+
+  const parseTimeItem = (timeItem: string): string => {
+      const splitArr = timeItem.split(':');
+      let hours = Number(splitArr[0]);
+
+      if (splitArr[1].indexOf('PM') > -1) {
+          hours += 12;
+      }
+
+      let minutes = Number(splitArr[1].replace('AM', '').replace('PM', '').trim());
+      return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+  }
+
+  const timeFrom = parseTimeItem(openingHours[0]);
+  const timeTo = parseTimeItem(openingHours[1]);
+
+  return DAYS.map((day) => ({
+      day,
+      timeRanges: [
+          {
+              timeFrom,
+              timeTo
+          }
+      ]
+  }))
 }

@@ -1,5 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import generator from '@goodrequest/express-joi-to-swagger'
+import { AUTH_METHOD, AUTH_SCOPE, API_KEY_LOCATION } from '@goodrequest/express-joi-to-swagger/dist/utils/authSchemes';
+import apiTypes from '@goodrequest/express-joi-to-swagger/dist/utils/authSchemes';
 import path from 'path'
 import rewiremock from 'rewiremock'
 import config from 'config'
@@ -96,8 +98,12 @@ export default (async () => {
 			responseSchemaName: 'responseSchema',
 			swaggerInitInfo: {
 				servers: [{
-					url: 'http://localhost:3001'
-				}],
+					url: 'http://localhost:3001',
+				},
+				{
+					url: 'https://qrmenu-asdit.herokuapp.com',
+				}
+				],
 				info: {
 					title: name,
 					version,
@@ -109,6 +115,14 @@ export default (async () => {
 						name: license,
 						url: ''
 					}
+				},
+				security: {
+					method: AUTH_METHOD.BEARER,
+    				scope: AUTH_SCOPE.GLOBAL,
+					config: {
+						bearerFormat: 'JWT'
+					},
+					authMiddlewareName:"authenticate"
 				}
 			}
 		})
