@@ -45,7 +45,7 @@ export const menuSlice = createSlice({
       state.menuItems = [
         ...state.menuItems,
         {
-          id: data.items.length + 1,
+          id: Math.max(...data.items.map((it) => it.id)) + 1,
           category: action.payload.category,
           subcategory: action.payload.subcategory,
           name: action.payload.dishName,

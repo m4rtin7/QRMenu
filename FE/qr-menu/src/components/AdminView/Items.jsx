@@ -29,13 +29,16 @@ import {
 import EditIcon from './images/edit.svg';
 
 export default function Items() {
-  const [modal, setModal] = useState(false);
+  const [openedModal, setOpenedModal] = useState(null);
   const dispatch = useDispatch();
   const menu = useSelector(selectMenu);
   const groupBySubcategory = _.groupBy(menu, 'subcategory');
   const categories = useSelector(selectCategories);
   const subcategories = useSelector(selectSubcategories);
-  const toggle = () => setModal(!modal);
+
+  const openModal = (id) => setOpenedModal(id);
+  const closeModal = () => setOpenedModal(null);
+
   return (
     <div className="items-container">
       {Object.entries(groupBySubcategory).map(([subcategory, items]) => {
@@ -72,16 +75,18 @@ export default function Items() {
                               width: '24px',
                               height: '24px',
                               display: 'inline-block',
-                              margin: '0 0 5px 30px'
+                              margin: '0 0 5px 30px',
+                              cursor: 'pointer'
                             }}
                             alt="Edit Icon"
-                            onClick={toggle}
+                            onClick={() => openModal(id)}
                             id={`${id}_${name}`}
                           />
-                          <Modal isOpen={modal} toggle={toggle}>
-                            <ModalHeader toggle={toggle}>
-                              Edit menu item
-                            </ModalHeader>
+                          <Modal
+                            isOpen={openedModal === id}
+                            toggle={closeModal}
+                          >
+                            <ModalHeader>Edit menu item</ModalHeader>
                             <ModalBody>
                               <Form>
                                 <Row>
