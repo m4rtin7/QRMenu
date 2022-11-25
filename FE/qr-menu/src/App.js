@@ -5,6 +5,8 @@ import { getUserRole } from './features/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllergensList } from './features/menuSlice';
 import AdminMenu from './components/AdminView/AdminMenu';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Login from './components/LoginView/Login';
 
 function App() {
   const isAdmin = useSelector(getUserRole);
@@ -14,20 +16,30 @@ function App() {
   }, []);
   return (
     <div className="App">
-      {isAdmin ? (
-        <section>
-          <AdminMenu />
-        </section>
-      ) : (
-        <>
-          <div style={{ margin: '20px' }}>
-            <h2> Menu </h2>
-          </div>
-          <section>
-            <Menu />
-          </section>
-        </>
-      )}
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route
+            path="/menu/:menuId"
+            element={
+              isAdmin ? (
+                <section>
+                  <AdminMenu />
+                </section>
+              ) : (
+                <>
+                  <div style={{ margin: '20px' }}>
+                    <h2> Menu </h2>
+                  </div>
+                  <section>
+                    <Menu />
+                  </section>
+                </>
+              )
+            }
+          />
+        </Routes>
+      </Router>
     </div>
   );
 }
