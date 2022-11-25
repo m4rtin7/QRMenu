@@ -31,6 +31,9 @@ import { getUserRole } from '../../features/userReducer';
 import EditIcon from './images/edit.svg';
 import Trash from './images/trash.svg';
 import './Categories.css';
+import QRCode from 'react-qr-code';
+import { useRef } from 'react';
+import ReactToPrint from 'react-to-print';
 
 export default function Categories() {
   const [modal, setModal] = useState(false);
@@ -49,6 +52,7 @@ export default function Categories() {
   const categories = useSelector(selectCategories);
   const allergens = useSelector(selectAllergens);
   const activeCategory = useSelector(selectActiveCategory);
+  const QRCodeRef = useRef(null);
   return (
     <div style={{ margin: '20px' }}>
       <Nav justified pills vertical={isAdmin}>
@@ -207,6 +211,11 @@ export default function Categories() {
           );
         })}
       </Nav>
+      <QRCode value={window.location.href} ref={QRCodeRef} />
+      <ReactToPrint
+        trigger={() => <Button color="primary">Print QRcode</Button>}
+        content={() => QRCodeRef.current}
+      />
     </div>
   );
 }
