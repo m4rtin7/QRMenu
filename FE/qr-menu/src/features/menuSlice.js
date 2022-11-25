@@ -45,7 +45,7 @@ export const menuSlice = createSlice({
       state.menuItems = [
         ...state.menuItems,
         {
-          id: data.items.length + 1,
+          id: Math.max(...data.items.map((it) => it.id)) + 1,
           category: action.payload.category,
           subcategory: action.payload.subcategory,
           name: action.payload.dishName,
@@ -57,7 +57,7 @@ export const menuSlice = createSlice({
     },
     editProduct: (state, action) => {
       state.menuItems = [
-        ...state.menuItems.filter((item) => item !== action.payload.id),
+        ...state.menuItems.filter((item) => item.id !== action.payload.id),
         {
           id: action.payload.id,
           category: action.payload.category,
@@ -65,9 +65,12 @@ export const menuSlice = createSlice({
           name: action.payload.dishName,
           desc: action.payload.description,
           price: action.payload.price,
-          allergens: action.payload.allergens
+          allergens: action.payload.allergens,
+          img: action.payload.img
         }
-      ];
+      ].sort(function (a, b) {
+        return a.id - b.id;
+      });
     },
     deleteCategory: (state, action) => {
       state.allCategories = state.allCategories.filter(

@@ -29,13 +29,20 @@ import {
 import EditIcon from './images/edit.svg';
 
 export default function Items() {
-  const [modal, setModal] = useState(false);
+  const [openedModal, setOpenedModal] = useState(null);
+  const [prodName, setProdName] = useState('');
+  const [priceValue, setPriceValue] = useState('');
+  const [description, setDescription] = useState('');
+
   const dispatch = useDispatch();
   const menu = useSelector(selectMenu);
   const groupBySubcategory = _.groupBy(menu, 'subcategory');
   const categories = useSelector(selectCategories);
   const subcategories = useSelector(selectSubcategories);
-  const toggle = () => setModal(!modal);
+
+  const openModal = (id) => setOpenedModal(id);
+  const closeModal = () => setOpenedModal(null);
+
   return (
     <div className="items-container">
       {Object.entries(groupBySubcategory).map(([subcategory, items]) => {
@@ -72,16 +79,23 @@ export default function Items() {
                               width: '24px',
                               height: '24px',
                               display: 'inline-block',
-                              margin: '0 0 5px 30px'
+                              margin: '0 0 5px 30px',
+                              cursor: 'pointer'
                             }}
                             alt="Edit Icon"
-                            onClick={toggle}
+                            onClick={() => {
+                              openModal(id);
+                              setProdName(name);
+                              setPriceValue(price);
+                              setDescription(desc);
+                            }}
                             id={`${id}_${name}`}
                           />
-                          <Modal isOpen={modal} toggle={toggle}>
-                            <ModalHeader toggle={toggle}>
-                              Edit menu item
-                            </ModalHeader>
+                          <Modal
+                            isOpen={openedModal === id}
+                            toggle={closeModal}
+                          >
+                            <ModalHeader>Edit menu item</ModalHeader>
                             <ModalBody>
                               <Form>
                                 <Row>
@@ -127,19 +141,25 @@ export default function Items() {
                                 <Row>
                                   <Col>
                                     <span>Dish name</span>
-                                    <input
+                                    <Input
                                       id="dish-name"
-                                      style={{ width: '100%' }}
-                                      value={name}
+                                      value={prodName}
+                                      type="text"
+                                      onChange={(event) =>
+                                        setProdName(event.target.value)
+                                      }
                                     />
                                   </Col>
                                   <Col>
                                     <span>
                                       Price:{' '}
-                                      <input
+                                      <Input
                                         id="price"
                                         type="number"
-                                        value={price}
+                                        value={priceValue}
+                                        onChange={(event) =>
+                                          setPriceValue(event.target.value)
+                                        }
                                       />
                                     </span>
                                   </Col>
@@ -156,11 +176,14 @@ export default function Items() {
                                 })}
                                 <br />
                                 <span>Description</span>
-                                <textarea
+                                <Input
                                   id="description"
-                                  style={{ width: '100%' }}
+                                  type="textarea"
                                   rows="4"
-                                  value={desc}
+                                  value={description}
+                                  onChange={(event) =>
+                                    setDescription(event.target.value)
+                                  }
                                 />
                                 <Label for="exampleFile">File</Label>
                                 <Input
@@ -198,10 +221,11 @@ export default function Items() {
                                     dishName,
                                     description,
                                     price,
-                                    allergens: []
+                                    allergens: [],
+                                    img
                                   };
                                   dispatch(editProduct(item));
-                                  toggle();
+                                  closeModal();
                                 }}
                               >
                                 Save
