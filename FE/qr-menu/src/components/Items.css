@@ -1,0 +1,39 @@
+.card-container {
+  margin: 20px;
+}
+.card {
+  width: 18rem;
+  height: 530px;
+}
+.card-image {
+  border-radius: 15px;
+  background: #F1F2F3;
+}
+.card-image img {
+  height: 162px;
+}
+.dot {
+  height: 33px;
+  width: 33px;
+  background-color: #FFBE33;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 10px;
+}
+
+.dot img {
+  height: 29px;
+  width: 29px;
+}
+
+.bottom-panel {
+  justify-content: space-between;
+  display: flex;
+  margin: 20px;
+  text-align: center;
+}
+
+.price {
+  margin-bottom: auto;
+  margin-top: auto;
+}

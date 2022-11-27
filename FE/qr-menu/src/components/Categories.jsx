@@ -6,22 +6,28 @@ import {
   selectCategories
 } from '../features/menuSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Nav, NavItem, NavLink } from 'reactstrap';
+import { Badge, Nav } from 'reactstrap';
+import './Categories.css';
 
 export default function Categories() {
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
   const activeCategory = useSelector(selectActiveCategory);
   return (
-    <div className="categories-container" style={{ margin: '20px' }}>
+    <div className="categories-container">
       <Nav justified pills>
-        {categories.map((category, index) => {
+        {categories.map((category) => {
           return (
-            <NavItem onClick={() => dispatch(filter(category))} key={index}>
-              <NavLink active={category === activeCategory} href="#">
+            <h3 className="badge-styling">
+              <Badge
+                className={category === activeCategory ? '' : 'text-dark'}
+                color={category === activeCategory ? 'dark' : 'light'}
+                pill
+                onClick={() => dispatch(filter(category))}
+              >
                 {category}
-              </NavLink>
-            </NavItem>
+              </Badge>
+            </h3>
           );
         })}
       </Nav>

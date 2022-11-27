@@ -8,8 +8,15 @@ import {
   CardTitle,
   CardSubtitle,
   CardText,
-  CardGroup
+  CardGroup,
+  Button
 } from 'reactstrap';
+import './Items.css';
+import ShoppingCart from '../icons/shopping_cart.png';
+import Wheat from '../icons/wheat.svg';
+import Egg from '../icons/egg.svg';
+import Milk from '../icons/milk.svg';
+import Peanuts from '../icons/peanuts.svg';
 
 export default function Items() {
   const menu = useSelector(selectMenu);
@@ -25,23 +32,41 @@ export default function Items() {
                 const { id, name, category, desc, price, allergens, img } =
                   item;
                 return (
-                  <div
-                    key={id}
-                    className="card-container"
-                    style={{ margin: '20px' }}
-                  >
-                    <Card
-                      style={{
-                        width: '18rem'
-                      }}
-                    >
-                      <img alt="Sample" src={img} />
+                  <div key={id} className="card-container">
+                    <Card color="dark" inverse className="card">
+                      <div className="card-image">
+                        <img alt="Sample" src={img} />
+                      </div>
                       <CardBody>
                         <CardTitle tag="h5">{name}</CardTitle>
                         <CardSubtitle className="mb-2 text-muted" tag="h6">
-                          {price}
+                          <span className="dot">
+                            <img src={Wheat} />
+                          </span>
+                          <span className="dot">
+                            <img src={Egg} />
+                          </span>
+                          <span className="dot">
+                            <img src={Milk} />
+                          </span>
+                          <span className="dot">
+                            <img src={Peanuts} />
+                          </span>
                         </CardSubtitle>
                         <CardText>{desc}</CardText>
+                        <div className="bottom-panel">
+                          <span className="price">€ {price}</span>
+                          <Button
+                            style={{ background: '#FFBE33' }}
+                            className="rounded-circle"
+                          >
+                            <img
+                              style={{ height: '30px', width: '30px' }}
+                              src={ShoppingCart}
+                              alt=""
+                            />
+                          </Button>
+                        </div>
                       </CardBody>
                     </Card>
                   </div>

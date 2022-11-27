@@ -1,14 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit';
 import data from '../data/menu.json';
 
+const allCategories = (items) => {
+  let categories = ['All'];
+  items.map((item) => {
+    if (categories.indexOf(item.category) === -1) {
+      categories.push(item.category);
+    }
+  });
+  return categories;
+};
+
 const initialState = {
-  menuItems: data.items.filter((item) => item.category === 'Main'),
-  allCategories: Array.from(new Set(data.items.map((item) => item.category))),
+  menuItems: data.items,
+  allCategories: allCategories(data.items),
   allSubcategories: Array.from(
     new Set(data.items.map((item) => item.subcategory))
   ),
   allAllergens: [],
-  activeCategory: 'Main'
+  activeCategory: 'All'
 };
 
 function onlyUnique(value, index, self) {
@@ -30,9 +40,10 @@ export const menuSlice = createSlice({
   initialState,
   reducers: {
     filter: (state, action) => {
-      state.menuItems = data.items.filter(
-        (item) => item.category === action.payload
-      );
+      state.menuItems =
+        action.payload === 'All'
+          ? data.items
+          : data.items.filter((item) => item.category === action.payload);
       state.activeCategory = action.payload;
     },
     setAllergensList: (state) => {
