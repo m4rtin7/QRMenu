@@ -1,11 +1,16 @@
 .header {
   background: #222831;
   height: 50px;
+  display: flex;
+  padding: 0px 5% 0px 45%;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
 }
 
 .name {
   color: #ffffff;
-  font-family: "Book Antiqua";
   font-weight: 500;
   font-size: 24px;
+  padding-right: 15px;
 }

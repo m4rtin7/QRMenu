@@ -1,10 +1,10 @@
 .badge-styling {
   margin-right: 35px;
   cursor: pointer;
-  font-family: "Book Antiqua";
 }
 
-.categories-container {
-  display: block;
+.category-container {
+  display: flex;
+  justify-content: center;
   margin: 20px;
 }

@@ -14,7 +14,7 @@ export default function Categories() {
   const categories = useSelector(selectCategories);
   const activeCategory = useSelector(selectActiveCategory);
   return (
-    <div className="categories-container">
+    <div className="category-container">
       <Nav justified pills>
         {categories.map((category) => {
           return (
