@@ -70,7 +70,6 @@ export default function Items() {
           })}
         </CardGroup>
       </div>
-      );
     </div>
   );
 }
