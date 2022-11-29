@@ -15,6 +15,7 @@ import {
   AccordionBody,
   AccordionHeader,
   AccordionItem,
+  Badge,
   Button,
   FormText,
   Input,
@@ -24,8 +25,7 @@ import {
   ModalFooter,
   ModalHeader,
   Nav,
-  NavItem,
-  NavLink
+  NavItem
 } from 'reactstrap';
 import { getUserRole } from '../../features/userReducer';
 import EditIcon from './images/edit.svg';
@@ -55,11 +55,11 @@ export default function Categories() {
   const QRCodeRef = useRef(null);
   return (
     <div style={{ margin: '20px' }}>
-      <Nav justified pills vertical={isAdmin}>
+      <Nav justified pills vertical>
         {isAdmin ? (
           <>
             <NavItem onClick={toggle} className="edit-button">
-              <Button color="primary" outline>
+              <Button color="dark" outline>
                 <span>Edit menu</span>
                 <img className="add-icon" src={EditIcon} alt="Edit Icon" />
               </Button>
@@ -77,7 +77,7 @@ export default function Categories() {
                         <span>Category name</span>
                         <input id="new_category_id" style={{ width: '100%' }} />
                         <Button
-                          color="primary"
+                          color="dark"
                           onClick={() => {
                             dispatch(
                               addCategory(
@@ -142,7 +142,7 @@ export default function Categories() {
                         <FormText>Upload picture of item</FormText>
                         <br />
                         <Button
-                          color="primary"
+                          color="dark"
                           onClick={() => {
                             const category =
                               document.getElementById('category-select').value;
@@ -185,35 +185,38 @@ export default function Categories() {
           return (
             <>
               <NavItem key={index} className="categories-container">
-                <NavLink
+                <div>
+                  <h2>
+                    <Badge
+                      className={category === activeCategory ? '' : 'text-dark'}
+                      color={category === activeCategory ? 'dark' : 'light'}
+                      pill
+                      onClick={() => dispatch(filter(category))}
+                    >
+                      {category}
+                    </Badge>
+                  </h2>
+                </div>
+                <Button
+                  color="light"
                   onClick={() => {
-                    if (categories.some((cat) => cat === category)) {
-                      dispatch(filter(category));
-                    }
+                    dispatch(deleteCategory(category));
                   }}
-                  active={category === activeCategory}
-                  href="#"
                 >
-                  {category}
-                </NavLink>
-                {isAdmin ? (
-                  <a
-                    href="#"
-                    onClick={() => {
-                      dispatch(deleteCategory(category));
-                    }}
-                  >
-                    <img src={Trash} />
-                  </a>
-                ) : null}
+                  <img alt="" src={Trash} />
+                </Button>
               </NavItem>
             </>
           );
         })}
       </Nav>
-      <QRCode value={window.location.href} ref={QRCodeRef} />
+      <QRCode
+        className="qr-code"
+        value={window.location.href}
+        ref={QRCodeRef}
+      />
       <ReactToPrint
-        trigger={() => <Button color="primary">Print QRcode</Button>}
+        trigger={() => <Button color="dark">Print QRcode</Button>}
         content={() => QRCodeRef.current}
       />
     </div>

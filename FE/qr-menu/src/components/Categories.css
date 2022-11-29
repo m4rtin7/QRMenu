@@ -1,0 +1,10 @@
+.badge-styling {
+  margin-right: 35px;
+  cursor: pointer;
+}
+
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
