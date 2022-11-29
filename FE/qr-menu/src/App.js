@@ -5,7 +5,7 @@ import { getUserRole } from './features/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAllergensList } from './features/menuSlice';
 import AdminMenu from './components/AdminView/AdminMenu';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/LoginView/Login';
 import { Header } from './components/Header';
 
