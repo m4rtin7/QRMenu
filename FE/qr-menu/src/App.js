@@ -10,7 +10,7 @@ import Login from './components/LoginView/Login';
 import { Header } from './components/Header';
 
 function App() {
-  const isAdmin = useSelector(getUserRole);
+  const isAdmin = true;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setAllergensList());

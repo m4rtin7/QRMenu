@@ -33,6 +33,8 @@ import Egg from '../../icons/egg.svg';
 import Milk from '../../icons/milk.svg';
 import Peanuts from '../../icons/peanuts.svg';
 import Trash from './images/trash.svg';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function Items() {
   const [openedModal, setOpenedModal] = useState(null);
@@ -47,6 +49,32 @@ export default function Items() {
 
   const openModal = (id) => setOpenedModal(id);
   const closeModal = () => setOpenedModal(null);
+
+  const [allAllergens, setAllAllergens] = useState([]);
+  const [checkedAllergens, setCheckedAllergens] = useState([]);
+
+  useEffect(() => {
+    const fetchAllergens = async () => {
+      try {
+        const response = await axios.get(
+          'https://qrmenu-asdit.herokuapp.com/api/v1/allergens/'
+        );
+        setAllAllergens(response.data.allergens);
+      } catch (err) {
+        console.log(err.response);
+      }
+    };
+
+    fetchAllergens();
+  }, []);
+
+  const handleAllergensChange = (idx) => {
+    const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
+      i == idx ? !a : a
+    );
+
+    setCheckedAllergens(updatedCheckedAllergens);
+  };
 
   return (
     <div className="items-container">
@@ -74,6 +102,9 @@ export default function Items() {
                           setProdName(name);
                           setPriceValue(price);
                           setDescription(desc);
+                          setCheckedAllergens(
+                            allAllergens.map((a) => allergens.includes(a))
+                          );
                         }}
                         id={`${id}_${name}`}
                       />
@@ -153,12 +184,17 @@ export default function Items() {
                               </Col>
                             </Row>
                             <span>Allergens:</span>
-                            {allergens.map((allergen, idx) => {
+                            {allAllergens.map((allergen, idx) => {
                               return (
                                 <>
                                   {'  '}
-                                  <Input type="checkbox" id={idx} />{' '}
-                                  <Label check>{allergen}</Label>
+                                  <Input
+                                    type="checkbox"
+                                    checked={checkedAllergens[idx]}
+                                    onChange={() => handleAllergensChange(idx)}
+                                    id={idx}
+                                  />{' '}
+                                  <Label>{allergen.name}</Label>
                                 </>
                               );
                             })}
@@ -203,7 +239,9 @@ export default function Items() {
                                 dishName,
                                 description,
                                 price,
-                                allergens: [],
+                                allergens: allAllergens.filter(
+                                  (a, i) => checkedAllergens[i]
+                                ),
                                 img
                               };
                               dispatch(editProduct(item));
