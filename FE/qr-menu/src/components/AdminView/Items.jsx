@@ -33,8 +33,7 @@ import Egg from '../../icons/egg.svg';
 import Milk from '../../icons/milk.svg';
 import Peanuts from '../../icons/peanuts.svg';
 import Trash from './images/trash.svg';
-import axios from 'axios';
-import { useEffect } from 'react';
+import { useQuery } from 'react-query';
 
 export default function Items() {
   const [openedModal, setOpenedModal] = useState(null);
@@ -50,23 +49,13 @@ export default function Items() {
   const openModal = (id) => setOpenedModal(id);
   const closeModal = () => setOpenedModal(null);
 
-  const [allAllergens, setAllAllergens] = useState([]);
   const [checkedAllergens, setCheckedAllergens] = useState([]);
 
-  useEffect(() => {
-    const fetchAllergens = async () => {
-      try {
-        const response = await axios.get(
-          'https://qrmenu-asdit.herokuapp.com/api/v1/allergens/'
-        );
-        setAllAllergens(response.data.allergens);
-      } catch (err) {
-        console.log(err.response);
-      }
-    };
-
-    fetchAllergens();
-  }, []);
+  const { data } = useQuery('allergens', () =>
+    fetch('https://qrmenu-asdit.herokuapp.com/api/v1/allergens/').then((res) =>
+      res.json()
+    )
+  );
 
   const handleAllergensChange = (idx) => {
     const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
@@ -103,7 +92,7 @@ export default function Items() {
                           setPriceValue(price);
                           setDescription(desc);
                           setCheckedAllergens(
-                            allAllergens.map((a) => allergens.includes(a))
+                            data?.allergens.map((a) => allergens.includes(a))
                           );
                         }}
                         id={`${id}_${name}`}
@@ -184,7 +173,7 @@ export default function Items() {
                               </Col>
                             </Row>
                             <span>Allergens:</span>
-                            {allAllergens.map((allergen, idx) => {
+                            {data?.allergens.map((allergen, idx) => {
                               return (
                                 <>
                                   {'  '}
@@ -239,7 +228,7 @@ export default function Items() {
                                 dishName,
                                 description,
                                 price,
-                                allergens: allAllergens.filter(
+                                allergens: data?.allergens.filter(
                                   (a, i) => checkedAllergens[i]
                                 ),
                                 img

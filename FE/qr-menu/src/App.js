@@ -8,41 +8,45 @@ import AdminMenu from './components/AdminView/AdminMenu';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/LoginView/Login';
 import { Header } from './components/Header';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 function App() {
-  const isAdmin = true;
+  const queryClient = new QueryClient();
+  const isAdmin = useSelector(getUserRole);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setAllergensList());
   }, []);
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route
-            path="/menu/:menuId"
-            element={
-              isAdmin ? (
-                <>
-                  <Header />
-                  <section>
-                    <AdminMenu />
-                  </section>
-                </>
-              ) : (
-                <>
-                  <Header />
-                  <section>
-                    <Menu />
-                  </section>
-                </>
-              )
-            }
-          />
-        </Routes>
-      </Router>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route
+              path="/menu/:menuId"
+              element={
+                isAdmin ? (
+                  <>
+                    <Header />
+                    <section>
+                      <AdminMenu />
+                    </section>
+                  </>
+                ) : (
+                  <>
+                    <Header />
+                    <section>
+                      <Menu />
+                    </section>
+                  </>
+                )
+              }
+            />
+          </Routes>
+        </Router>
+      </div>
+    </QueryClientProvider>
   );
 }
 
