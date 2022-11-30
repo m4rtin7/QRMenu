@@ -87,6 +87,11 @@ export const menuSlice = createSlice({
       state.allCategories = state.allCategories.filter(
         (category) => category !== action.payload
       );
+    },
+    deleteItem: (state, action) => {
+      state.menuItems = state.menuItems.filter(
+        (item) => item.name !== action.payload
+      );
     }
   }
 });
@@ -97,6 +102,7 @@ export const { setAllergensList } = menuSlice.actions;
 export const { addProduct } = menuSlice.actions;
 export const { editProduct } = menuSlice.actions;
 export const { deleteCategory } = menuSlice.actions;
+export const { deleteItem } = menuSlice.actions;
 
 export const selectMenu = (state) => state.menu.menuItems;
 

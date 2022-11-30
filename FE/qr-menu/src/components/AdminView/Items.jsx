@@ -4,7 +4,8 @@ import {
   editProduct,
   selectCategories,
   selectMenu,
-  selectSubcategories
+  selectSubcategories,
+  deleteItem
 } from '../../features/menuSlice';
 import _ from 'lodash';
 import {
@@ -31,6 +32,7 @@ import Wheat from '../../icons/wheat.svg';
 import Egg from '../../icons/egg.svg';
 import Milk from '../../icons/milk.svg';
 import Peanuts from '../../icons/peanuts.svg';
+import Trash from './images/trash.svg';
 
 export default function Items() {
   const [openedModal, setOpenedModal] = useState(null);
@@ -74,6 +76,14 @@ export default function Items() {
                           setDescription(desc);
                         }}
                         id={`${id}_${name}`}
+                      />
+                      <img
+                        src={Trash}
+                        className="remove-icon"
+                        alt="Remove Icon"
+                        onClick={() => {
+                          dispatch(deleteItem(name));
+                        }}
                       />
                       <Modal isOpen={openedModal === id} toggle={closeModal}>
                         <ModalHeader>Edit menu item</ModalHeader>

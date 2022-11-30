@@ -14,7 +14,15 @@
   width: 24px;
   height: 24px;
   display: inline-block;
-  margin: 0 0 5px 30px;
+  margin: 0 0 5px 15px;
+  cursor: pointer;
+}
+.remove-icon {
+  filter: invert(49%) sepia(12%) saturate(3499%) hue-rotate(365deg) brightness(103%) contrast(103%);
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin: 0 0 5px 15px;
   cursor: pointer;
 }
 .card-image {
