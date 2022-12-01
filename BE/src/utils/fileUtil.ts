@@ -106,6 +106,7 @@ export const fileWriteToStorage = async (args: FileWriteArgs) => {
                 dataType,
                 mimeType,
                 path: normalizePath(path.join(relativePath, file.filename)),
+                pathFileName: relativePath,
                 size: file.size,
                 title: args.title,
                 altText: args.altText,

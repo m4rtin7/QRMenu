@@ -13,8 +13,10 @@ export const schema = Joi.object({
     body: Joi.object({
         name: Joi.string().required(),
 		price: Joi.number().min(0).required(),
-        categoryID: Joi.number().integer().required().min(1),
-        photoID: Joi.number().integer().optional().min(1),
+        category: Joi.string().required(),
+        subcategory: Joi.string().optional(),
+        description: Joi.string().optional(),
+        imageID: Joi.number().integer().optional().min(1),
         allergenIDs: Joi.array().items(Joi.number().integer().min(0)).required(),
     }),
     query: Joi.object(),
@@ -34,7 +36,7 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
     let transaction
     try {
         const { models, body, params, user: authUser } = req
-        const { MenuItemAllergen, MenuItem, MenuItemCategory, Restaurant, Allergen } = models
+        const { MenuItemAllergen, MenuItem, Restaurant, File, Allergen } = models
 
         const restaurant = await Restaurant.findOne({
             where: {
@@ -51,32 +53,42 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nepatri prihlasenmu uzivatelovi`))
         }
 
+        const foundPhoto = await File.findByPk(parseInt(body.imageID, 10))
+        
+		if (!foundPhoto) {
+			throw new ErrorBuilder(404, req.t(`error:Fotka s ID ${body.imageID} nebola nájdená`))
+		}
+
         let data = {
             name: body.name,
             price: body.price,
-            categoryID: body.categoryID,
+            category: body.category,
+            subcategory: body.subcategory,
+            imageID: body.imageID,
             createdBy: authUser.id,
-            restaurantID: params.restaurantID
+            restaurantID: restaurant.id,
+            description: body.description,
+            // categoryID: body.categoryID,
         }
 
-        const category = await MenuItemCategory.findOne({
-            where: {
-                id: {
-                    [Op.eq]: body.categoryID
-                }
-            }
-        })
+        // const category = await MenuItemCategory.findOne({
+        //     where: {
+        //         id: {
+        //             [Op.eq]: body.categoryID
+        //         }
+        //     }
+        // })
 
-        if (!category) {
-            throw new ErrorBuilder(404, req.t('error:Kategoria nebola nájdené'))
-        }
+        // if (!category) {
+        //     throw new ErrorBuilder(404, req.t('error:Kategoria nebola nájdené'))
+        // }
 
         transaction = await sequelize.transaction()
 
         const menuItem = await MenuItem.create(data, {
             transaction,
         }) 
-
+        
         const allergensIDs = uniq(body.allergenIDs) as number[]
         if (!isEmpty(allergensIDs)) {
             const allergens = await Allergen.findAll({
@@ -88,7 +100,7 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             })
 
             if (allergens.length != allergensIDs.length) {
-                throw new ErrorBuilder(404, req.t('error:Alergen nebolo nájdené'))
+                throw new ErrorBuilder(404, req.t('error:Alergeny neboli nájdené'))
             }
 
             const accessoriesData = map(allergensIDs, (allergenID) => ({

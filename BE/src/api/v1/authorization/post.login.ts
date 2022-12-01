@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import Joi from 'joi'
 import config from 'config'
-import { Transaction } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 
 import sequelize from '../../../db/models'
 
@@ -31,6 +31,16 @@ export const responseSchema = Joi.object({
 	profile: Joi.object({
 		id: Joi.number().integer().min(1).required(),
 		fullname: Joi.string().required(),
+		restaurant: Joi.object({
+            id: Joi.number().integer().min(1).required(),
+            city: Joi.string().required(),
+            address: Joi.string().required(),
+            zipCode: Joi.string().required(),
+            phone: Joi.string().required(),
+            contactPerson: Joi.string().required(),
+            websiteURL: Joi.string().required(),
+            menuURL: Joi.string().required(),
+			}).required()
 	}).required()
 })
 
@@ -59,17 +69,28 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
 
 		await transaction.commit()
 
+		const { Restaurant } = models
+
 		let extendedProfile: UserModel
 		if (includeExtendedProfile) {
 			extendedProfile = await getUserById(models, authUser.id);
 		}
 
+		const restaurant = await Restaurant.findOne({
+            where: {
+                ownedBy: {
+                    [Op.eq]: authUser.id
+                }
+            }
+        })
+
 		const profile = {
 			id: authUser.id,
 			fullname: authUser.fullName,
+			restaurant,
 		}
 
-		return res.json({ accessToken, profile, extendedProfile })
+		return res.json({ accessToken, profile })
 	} catch (error) {
 		if (transaction) {
 			await transaction.rollback()

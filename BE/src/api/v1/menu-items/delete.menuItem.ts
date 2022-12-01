@@ -10,13 +10,11 @@ import ErrorBuilder from '../../../utils/ErrorBuilder'
 import { fullMessagesResponse } from '../../../utils/joiSchemas'
 
 export const schema = Joi.object({
-	headers: Joi.object({
-		'x-resortID': Joi.number().integer().min(1).required()
-	}),
 	body: Joi.object(),
 	query: Joi.object(),
 	params: Joi.object({
-		restaurantID: Joi.number().integer().min(1).required()
+		restaurantID: Joi.number().integer().min(1).required(),
+		menuItemID: Joi.number().integer().min(1).required()
 	})
 })
 
@@ -26,33 +24,32 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
 	let transaction: Transaction
 	try {
 		const { params, user: authUser, models, resortID } = req
-		const { Restaurant, Attraction } = models
+		const { MenuItem, Restaurant } = models
 
-		const restaurant = await Restaurant.findByPk(parseInt(params.restaurantID, 10), {
-			paranoid: false,
-			include: [
-				{
-					model: Attraction,
-					where: {
-						resortID: {
-							[Op.eq]: resortID
-						}
-					}
-				}
-			]
-		})
+		const restaurant = await Restaurant.findOne({
+            where: {
+                id: {
+                    [Op.eq]: params.restaurantID
+                }
+            }
+        })
 
-		if (!restaurant) {
-			throw new ErrorBuilder(404, req.t('error:Reštaurácia nebola nájdená'))
-		}
+        if (!restaurant) {
+            throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nebola naidena`))
+        }
+        if (restaurant.ownedBy !== authUser.id) {
+            throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nepatri prihlasenmu uzivatelovi`))
+        }
 
-		if (restaurant.deletedAt) {
-			throw new ErrorBuilder(409, req.t('error:Reštaurácia už bola odstránená'))
+		const foundMenuItem = await MenuItem.findByPk(parseInt(params.menuItemID, 10))
+
+		if (!foundMenuItem) {
+			throw new ErrorBuilder(404, req.t('error:Polozka menu nebola nájdená'))
 		}
 
 		transaction = await sequelize.transaction()
 
-		await restaurant.destroy({ deletedBy: authUser.id, transaction })
+		await foundMenuItem.destroy({ deletedBy: authUser.id, transaction })
 
 		await transaction.commit()
 

@@ -91,7 +91,7 @@ const MenuItemsData = [
 
 export async function up() {
 	try {
-		const { User, MenuItem, MenuItemCategory, Restaurant } = models
+		const { User, MenuItem,  Restaurant } = models
 
 		const systemUser = 
 			await User.findOne({
@@ -115,15 +115,16 @@ export async function up() {
                 createdBy: systemUser.id
             })))
 
-        const createdCategories = await MenuItemCategory.bulkCreate(menuItemsCategories, {
-                logging,
-                applicationLogging: false
-            })
+        // const createdCategories = await MenuItemCategory.bulkCreate(menuItemsCategories, {
+        //         logging,
+        //         applicationLogging: false
+        //     })
 
 		const menuItemsData = map(MenuItemsData, (item) => ({
 			name: item.name || null,
             description: item.desc,
-            categoryID: createdCategories.find( e => e.name === item.category).id || null,
+            category: item.category,
+            subcategory: item.subcategory,
 			price: item.price || null,
       restaurantID: restaurant.id,
 			createdBy: systemUser.id
