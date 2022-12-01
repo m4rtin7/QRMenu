@@ -577,27 +577,17 @@
 														"description": {
 															"type": "string"
 														},
+														"category": {
+															"type": "string"
+														},
+														"subcategory": {
+															"type": "string"
+														},
 														"restaurantID": {
 															"type": "integer"
 														},
 														"categoryID": {
 															"type": "integer"
-														},
-														"menuItemCategory": {
-															"type": "object",
-															"properties": {
-																"id": {
-																	"type": "integer"
-																},
-																"name": {
-																	"type": "string"
-																}
-															},
-															"required": [
-																"id",
-																"name"
-															],
-															"additionalProperties": false
 														},
 														"allergens": {
 															"type": "array",
@@ -624,25 +614,21 @@
 														"image": {
 															"type": "object",
 															"properties": {
-																"pathToFolder": {
+																"id": {
+																	"type": "integer"
+																},
+																"name": {
 																	"type": "string",
 																	"maxLength": 1000
 																},
 																"title": {
 																	"type": "string",
 																	"maxLength": 255
-																},
-																"altText": {
-																	"type": "string",
-																	"maxLength": 255
-																},
-																"description": {
-																	"type": "string",
-																	"maxLength": 500
 																}
 															},
 															"required": [
-																"pathToFolder"
+																"id",
+																"name"
 															],
 															"additionalProperties": false
 														}
@@ -652,9 +638,9 @@
 														"name",
 														"price",
 														"description",
+														"category",
 														"restaurantID",
-														"categoryID",
-														"menuItemCategory"
+														"categoryID"
 													],
 													"additionalProperties": false
 												}
@@ -782,11 +768,16 @@
 										"format": "float",
 										"minimum": 0
 									},
-									"categoryID": {
-										"type": "integer",
-										"minimum": 1
+									"category": {
+										"type": "string"
 									},
-									"photoID": {
+									"subcategory": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									},
+									"imageID": {
 										"type": "integer",
 										"minimum": 1
 									},
@@ -801,7 +792,7 @@
 								"required": [
 									"name",
 									"price",
-									"categoryID",
+									"category",
 									"allergenIDs"
 								]
 							}
@@ -821,6 +812,15 @@
 				"parameters": [
 					{
 						"name": "restaurantID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "menuItemID",
 						"in": "path",
 						"required": true,
 						"schema": {
@@ -883,11 +883,16 @@
 										"format": "float",
 										"minimum": 0
 									},
-									"categoryID": {
-										"type": "integer",
-										"minimum": 1
+									"category": {
+										"type": "string"
 									},
-									"photoID": {
+									"subcategory": {
+										"type": "string"
+									},
+									"description": {
+										"type": "string"
+									},
+									"imageID": {
 										"type": "integer",
 										"minimum": 1
 									},
@@ -902,9 +907,77 @@
 								"required": [
 									"name",
 									"price",
-									"categoryID",
+									"category",
 									"allergenIDs"
 								]
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Menu-items"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "deleteApiV1RestaurantIdMenuItemsMenuItemId",
+				"parameters": [
+					{
+						"name": "restaurantID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "menuItemID",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										}
+									},
+									"required": [
+										"messages"
+									],
+									"additionalProperties": false
+								}
 							}
 						}
 					}
@@ -1063,11 +1136,53 @@
 												},
 												"fullname": {
 													"type": "string"
+												},
+												"restaurant": {
+													"type": "object",
+													"properties": {
+														"id": {
+															"type": "integer",
+															"minimum": 1
+														},
+														"city": {
+															"type": "string"
+														},
+														"address": {
+															"type": "string"
+														},
+														"zipCode": {
+															"type": "string"
+														},
+														"phone": {
+															"type": "string"
+														},
+														"contactPerson": {
+															"type": "string"
+														},
+														"websiteURL": {
+															"type": "string"
+														},
+														"menuURL": {
+															"type": "string"
+														}
+													},
+													"required": [
+														"id",
+														"city",
+														"address",
+														"zipCode",
+														"phone",
+														"contactPerson",
+														"websiteURL",
+														"menuURL"
+													],
+													"additionalProperties": false
 												}
 											},
 											"required": [
 												"id",
-												"fullname"
+												"fullname",
+												"restaurant"
 											],
 											"additionalProperties": false
 										}

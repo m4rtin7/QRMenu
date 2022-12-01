@@ -1,4 +1,4 @@
-/*! For license information please see app.436f77962ec03942756a.bundle.js.LICENSE.txt */
+/*! For license information please see app.a8cb8b5682f832c1f34b.bundle.js.LICENSE.txt */
 ;(() => {
 	var e = {
 			825: function (e, t, r) {
@@ -328,11 +328,7 @@
 						'/api/v1/files/': {
 							post: {
 								tags: ['Files'],
-								security: [
-									{
-										bearerAuth: []
-									}
-								],
+								security: [{ bearerAuth: [] }],
 								summary: 'PERMISSION: NO',
 								operationId: 'postApiV1Files',
 								parameters: [],
@@ -438,14 +434,10 @@
 																		name: { type: 'string' },
 																		price: { type: 'integer' },
 																		description: { type: 'string' },
+																		category: { type: 'string' },
+																		subcategory: { type: 'string' },
 																		restaurantID: { type: 'integer' },
 																		categoryID: { type: 'integer' },
-																		menuItemCategory: {
-																			type: 'object',
-																			properties: { id: { type: 'integer' }, name: { type: 'string' } },
-																			required: ['id', 'name'],
-																			additionalProperties: !1
-																		},
 																		allergens: {
 																			type: 'array',
 																			items: {
@@ -458,16 +450,15 @@
 																		image: {
 																			type: 'object',
 																			properties: {
-																				pathToFolder: { type: 'string', maxLength: 1e3 },
-																				title: { type: 'string', maxLength: 255 },
-																				altText: { type: 'string', maxLength: 255 },
-																				description: { type: 'string', maxLength: 500 }
+																				id: { type: 'integer' },
+																				name: { type: 'string', maxLength: 1e3 },
+																				title: { type: 'string', maxLength: 255 }
 																			},
-																			required: ['pathToFolder'],
+																			required: ['id', 'name'],
 																			additionalProperties: !1
 																		}
 																	},
-																	required: ['id', 'name', 'price', 'description', 'restaurantID', 'categoryID', 'menuItemCategory'],
+																	required: ['id', 'name', 'price', 'description', 'category', 'restaurantID', 'categoryID'],
 																	additionalProperties: !1
 																}
 															}
@@ -494,11 +485,7 @@
 							},
 							post: {
 								tags: ['Menu-items'],
-								security: [
-									{
-										bearerAuth: []
-									}
-								],
+								security: [{ bearerAuth: [] }],
 								summary: 'PERMISSION: NO',
 								operationId: 'postApiV1RestaurantIdMenuItems',
 								parameters: [{ name: 'restaurantID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } }],
@@ -536,11 +523,13 @@
 												properties: {
 													name: { type: 'string' },
 													price: { type: 'number', format: 'float', minimum: 0 },
-													categoryID: { type: 'integer', minimum: 1 },
-													photoID: { type: 'integer', minimum: 1 },
+													category: { type: 'string' },
+													subcategory: { type: 'string' },
+													description: { type: 'string' },
+													imageID: { type: 'integer', minimum: 1 },
 													allergenIDs: { type: 'array', items: { type: 'integer', minimum: 0 } }
 												},
-												required: ['name', 'price', 'categoryID', 'allergenIDs']
+												required: ['name', 'price', 'category', 'allergenIDs']
 											}
 										}
 									}
@@ -550,14 +539,13 @@
 						'/api/v1/{restaurantID}/menu-items/{menuItemID}': {
 							patch: {
 								tags: ['Menu-items'],
-								security: [
-									{
-										bearerAuth: []
-									}
-								],
+								security: [{ bearerAuth: [] }],
 								summary: 'PERMISSION: NO',
 								operationId: 'patchApiV1RestaurantIdMenuItemsMenuItemId',
-								parameters: [{ name: 'restaurantID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } }],
+								parameters: [
+									{ name: 'restaurantID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } },
+									{ name: 'menuItemID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } }
+								],
 								responses: {
 									200: {
 										description: 'Success response',
@@ -591,11 +579,48 @@
 												properties: {
 													name: { type: 'string' },
 													price: { type: 'number', format: 'float', minimum: 0 },
-													categoryID: { type: 'integer', minimum: 1 },
-													photoID: { type: 'integer', minimum: 1 },
+													category: { type: 'string' },
+													subcategory: { type: 'string' },
+													description: { type: 'string' },
+													imageID: { type: 'integer', minimum: 1 },
 													allergenIDs: { type: 'array', items: { type: 'integer', minimum: 0 } }
 												},
-												required: ['name', 'price', 'categoryID', 'allergenIDs']
+												required: ['name', 'price', 'category', 'allergenIDs']
+											}
+										}
+									}
+								}
+							},
+							delete: {
+								tags: ['Menu-items'],
+								security: [{ bearerAuth: [] }],
+								summary: 'PERMISSION: NO',
+								operationId: 'deleteApiV1RestaurantIdMenuItemsMenuItemId',
+								parameters: [
+									{ name: 'restaurantID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } },
+									{ name: 'menuItemID', in: 'path', required: !0, schema: { type: 'integer', minimum: 1 } }
+								],
+								responses: {
+									200: {
+										description: 'Success response',
+										content: {
+											'application/json': {
+												schema: {
+													type: 'object',
+													properties: {
+														messages: {
+															type: 'array',
+															items: {
+																type: 'object',
+																properties: { message: { type: 'string' }, type: { type: 'string', enum: ['SUCCESS'] } },
+																required: ['message', 'type'],
+																additionalProperties: !1
+															}
+														}
+													},
+													required: ['messages'],
+													additionalProperties: !1
+												}
 											}
 										}
 									}
@@ -682,8 +707,26 @@
 														},
 														profile: {
 															type: 'object',
-															properties: { id: { type: 'integer', minimum: 1 }, fullname: { type: 'string' } },
-															required: ['id', 'fullname'],
+															properties: {
+																id: { type: 'integer', minimum: 1 },
+																fullname: { type: 'string' },
+																restaurant: {
+																	type: 'object',
+																	properties: {
+																		id: { type: 'integer', minimum: 1 },
+																		city: { type: 'string' },
+																		address: { type: 'string' },
+																		zipCode: { type: 'string' },
+																		phone: { type: 'string' },
+																		contactPerson: { type: 'string' },
+																		websiteURL: { type: 'string' },
+																		menuURL: { type: 'string' }
+																	},
+																	required: ['id', 'city', 'address', 'zipCode', 'phone', 'contactPerson', 'websiteURL', 'menuURL'],
+																	additionalProperties: !1
+																}
+															},
+															required: ['id', 'fullname', 'restaurant'],
 															additionalProperties: !1
 														}
 													},

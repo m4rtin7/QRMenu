@@ -63,6 +63,7 @@ i18next
 
 const app = express()
 app.use('/apidoc', express.static('apidoc')) // NOTE: serve apidoc before helmet
+app.use(express.static('files/uploads'));
 
 // Disable helmet if requested via env
 // eslint-disable-next-line eqeqeq

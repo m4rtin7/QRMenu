@@ -12,13 +12,16 @@ export const schema = Joi.object({
     body: Joi.object({
         name: Joi.string().required(),
 		price: Joi.number().min(0).required(),
-        categoryID: Joi.number().integer().required().min(1),
-        photoID: Joi.number().integer().optional().min(1),
+        category: Joi.string().required(),
+        subcategory: Joi.string().optional(),
+        description: Joi.string().optional(),
+        imageID: Joi.number().integer().optional().min(1),
         allergenIDs: Joi.array().items(Joi.number().integer().min(0)).required(),
     }),
     query: Joi.object(),
     params: Joi.object({
-        restaurantID: Joi.number().integer().min(1).required()
+        restaurantID: Joi.number().integer().min(1).required(),
+        menuItemID: Joi.number().integer().min(1).required(),
     })
 })
 
@@ -28,12 +31,16 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
     let transaction
     try {
         const { models, body, params, user: authUser } = req
-        const { File, MenuItem, MenuItemCategory, Restaurant, Allergen, MenuItemAllergen } = models
+        const { File, MenuItem, Restaurant, Allergen, MenuItemAllergen } = models
 
         let data = {
             name: body.name,
             price: body.price,
-            categoryID: body.categoryID,
+            category: body.category,
+            subcategory: body.subcategory,
+            imageID: body.imageID,
+            description: body.description,
+            // categoryID: body.categoryID,
         }
 
         const restaurant = await Restaurant.findOne({
@@ -57,6 +64,27 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
 			throw new ErrorBuilder(404, req.t('error:Polozka menu nebola nájdená'))
 		}
 
+        const foundPhoto = await File.findByPk(parseInt(body.imageID, 10))
+        
+		if (!foundPhoto) {
+			throw new ErrorBuilder(404, req.t(`error:Fotka s ID ${body.imageID} nebola nájdená`))
+		}
+
+        transaction = await sequelize.transaction()
+
+        const menuItem = await foundMenuItem.update(data, {
+			transaction
+		})
+
+        await MenuItemAllergen.destroy({
+			where: {
+				menuItemID: {
+					[Op.eq]: menuItem.id
+				}
+			},
+			transaction
+		})
+
         const allergensIDs = uniq(body.allergenIDs) as number[]
         if (!isEmpty(allergensIDs)) {
             const allergens = await Allergen.findAll({
@@ -78,24 +106,17 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             await MenuItemAllergen.bulkCreate(accessoriesData, { transaction })
         }
 
-        const category = await MenuItemCategory.findOne({
-            where: {
-                id: {
-                    [Op.eq]: body.categoryID
-                }
-            }
-        })
+        // const category = await MenuItemCategory.findOne({
+        //     where: {
+        //         id: {
+        //             [Op.eq]: body.categoryID
+        //         }
+        //     }
+        // })
 
-        if (!category) {
-            throw new ErrorBuilder(404, req.t('error:Kategoria nebola nájdené'))
-        }
-
-        transaction = await sequelize.transaction()
-
-
-		await foundMenuItem.update(data, {
-			transaction
-		})
+        // if (!category) {
+        //     throw new ErrorBuilder(404, req.t('error:Kategoria nebola nájdené'))
+        // }
 		
         await transaction.commit()
 

@@ -8,7 +8,7 @@ import { PERMISSION } from '../../../utils/enums'
 import * as getMenuItems from './get.menuItems'
 import * as postMenuItem from './post.menuItem'
 import * as patchMenuItem from './patch.menuItem'
-//import * as deletemMenuItem from './delete.menuItem'
+import * as deletemMenuItem from './delete.menuItem'
 
 const router = Router({ mergeParams: true })
 
@@ -33,13 +33,12 @@ export default () => {
 		patchMenuItem.workflow
 	)
 
-	// router.delete(
-	// 	'/:menuItemID',
-	// 	passport.authenticate(['jwt-api']),
-	// 	permissionMiddleware([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER]),
-	// 	validationMiddleware(deletemMenuItem.schema),
-	// 	deletemMenuItem.workflow
-	// )
+	router.delete(
+		'/:menuItemID',
+		passport.authenticate(['jwt-api']),
+		validationMiddleware(deletemMenuItem.schema),
+		deletemMenuItem.workflow
+	)
 
 	return router
 }

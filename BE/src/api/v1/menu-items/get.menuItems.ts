@@ -35,22 +35,20 @@ export const responseSchema = Joi.object({
                 name: Joi.string().required(),
                 price: Joi.number().integer().required(),
                 description: Joi.string().required(),
+                category: Joi.string().required(),
+                subcategory: Joi.string().optional(),
                 restaurantID: Joi.number().integer().required(),
                 categoryID: Joi.number().integer().required(),
-                menuItemCategory: Joi.object({
-                    id: Joi.number().integer().required(),
-                    name: Joi.string().required(),
-                }).required(),
                 allergens: Joi.array().items({
                     id: Joi.number().integer().required(),
                     name: Joi.string().required(),
                     description: Joi.string().optional()
                 }),
                 image: Joi.object({
-                    pathToFolder: Joi.string().max(1000).required(),
+                    id: Joi.number().integer().required(),
+                    name: Joi.string().max(1000).required(),
                     title: Joi.string().max(255).optional(),
-                    altText: Joi.string().max(255).optional(),
-                    description: Joi.string().max(500).optional()}).optional()
+                }).optional()
             })
         )
         .required(),
@@ -60,7 +58,7 @@ export const responseSchema = Joi.object({
 export const workflow = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { models, query, params} = req
-        const { MenuItem, MenuItemCategory, File, Restaurant, Allergen } = models
+        const { MenuItem, File, Restaurant, Allergen } = models
 
         const { limit } = query
         const offset = query.page * limit - limit
@@ -95,10 +93,6 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
         const result = await MenuItem.findAndCountAll({
             order,
             include: [
-                {
-                    model: MenuItemCategory,
-                    attributes: [ 'id','name'],
-                },
                 {
                     model: Allergen,
                     attributes: [ 'id','name', 'description'],
