@@ -33,6 +33,7 @@ import Egg from '../../icons/egg.svg';
 import Milk from '../../icons/milk.svg';
 import Peanuts from '../../icons/peanuts.svg';
 import Trash from './images/trash.svg';
+import { useQuery } from 'react-query';
 
 export default function Items() {
   const [openedModal, setOpenedModal] = useState(null);
@@ -47,6 +48,30 @@ export default function Items() {
 
   const openModal = (id) => setOpenedModal(id);
   const closeModal = () => setOpenedModal(null);
+
+  const [checkedAllergens, setCheckedAllergens] = useState([]);
+
+  const {
+    data: allAllergens,
+    isLoading,
+    isError,
+    error
+  } = useQuery('/api/v1/allergens/');
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  const handleAllergensChange = (idx) => {
+    const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
+      i == idx ? !a : a
+    );
+
+    setCheckedAllergens(updatedCheckedAllergens);
+  };
 
   return (
     <div className="items-container">
@@ -74,6 +99,11 @@ export default function Items() {
                           setProdName(name);
                           setPriceValue(price);
                           setDescription(desc);
+                          setCheckedAllergens(
+                            allAllergens?.allergens.map((a) =>
+                              allergens.includes(a)
+                            )
+                          );
                         }}
                         id={`${id}_${name}`}
                       />
@@ -153,12 +183,17 @@ export default function Items() {
                               </Col>
                             </Row>
                             <span>Allergens:</span>
-                            {allergens.map((allergen, idx) => {
+                            {allAllergens?.allergens.map((allergen, idx) => {
                               return (
                                 <>
                                   {'  '}
-                                  <Input type="checkbox" id={idx} />{' '}
-                                  <Label check>{allergen}</Label>
+                                  <Input
+                                    type="checkbox"
+                                    checked={checkedAllergens[idx]}
+                                    onChange={() => handleAllergensChange(idx)}
+                                    id={idx}
+                                  />{' '}
+                                  <Label>{allergen.name}</Label>
                                 </>
                               );
                             })}
@@ -203,7 +238,9 @@ export default function Items() {
                                 dishName,
                                 description,
                                 price,
-                                allergens: [],
+                                allergens: allAllergens?.allergens.filter(
+                                  (a, i) => checkedAllergens[i]
+                                ),
                                 img
                               };
                               dispatch(editProduct(item));
