@@ -51,11 +51,19 @@ export default function Items() {
 
   const [checkedAllergens, setCheckedAllergens] = useState([]);
 
-  const { data } = useQuery('allergens', () =>
-    fetch('https://qrmenu-asdit.herokuapp.com/api/v1/allergens/').then((res) =>
-      res.json()
-    )
-  );
+  const {
+    data: allAllergens,
+    isLoading,
+    isError,
+    error
+  } = useQuery('/api/v1/allergens/');
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   const handleAllergensChange = (idx) => {
     const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
@@ -92,7 +100,9 @@ export default function Items() {
                           setPriceValue(price);
                           setDescription(desc);
                           setCheckedAllergens(
-                            data?.allergens.map((a) => allergens.includes(a))
+                            allAllergens?.allergens.map((a) =>
+                              allergens.includes(a)
+                            )
                           );
                         }}
                         id={`${id}_${name}`}
@@ -173,7 +183,7 @@ export default function Items() {
                               </Col>
                             </Row>
                             <span>Allergens:</span>
-                            {data?.allergens.map((allergen, idx) => {
+                            {allAllergens?.allergens.map((allergen, idx) => {
                               return (
                                 <>
                                   {'  '}
@@ -228,7 +238,7 @@ export default function Items() {
                                 dishName,
                                 description,
                                 price,
-                                allergens: data?.allergens.filter(
+                                allergens: allAllergens?.allergens.filter(
                                   (a, i) => checkedAllergens[i]
                                 ),
                                 img
