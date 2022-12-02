@@ -9,14 +9,13 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/LoginView/Login';
 import { Header } from './components/Header';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import axios from 'axios';
+import { BASE_URL } from './constants';
 
 function createQueryFn(baseUrl) {
   return async ({ queryKey }) => {
-    const res = await fetch(baseUrl + queryKey);
-
-    if (!res.ok) throw new Error(await res.json());
-
-    return res.json();
+    const res = await axios.get(baseUrl + queryKey);
+    return res.data;
   };
 }
 
@@ -24,7 +23,7 @@ function App() {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        queryFn: createQueryFn('https://qrmenu-asdit.herokuapp.com')
+        queryFn: createQueryFn(BASE_URL)
       }
     }
   });
