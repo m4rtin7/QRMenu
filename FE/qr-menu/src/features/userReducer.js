@@ -9,12 +9,15 @@ export const userReducer = createSlice({
     setUserRole: (state) => {
       state = !state;
       return state;
+    },
+    setLoggedIn: (stat) => {
+      return true;
     }
   }
 });
 
 export const getUserRole = (state) => state.isAdmin;
 
-export const { setUserRole } = userReducer.actions;
+export const { setUserRole, setLoggedIn } = userReducer.actions;
 
 export default userReducer.reducer;

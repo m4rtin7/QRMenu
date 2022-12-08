@@ -39,7 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route
-              path="/menu/:menuId"
+              path="/menu/:restaurantId"
               element={
                 isAdmin ? (
                   <>
