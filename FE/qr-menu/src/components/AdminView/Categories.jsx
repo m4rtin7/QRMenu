@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   addCategory,
-  addProduct,
   deleteCategory,
   filter,
   selectActiveCategory,
-  selectAllergens,
   selectCategories
 } from '../../features/menuSlice';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,8 +32,14 @@ import './Categories.css';
 import QRCode from 'react-qr-code';
 import { useRef } from 'react';
 import ReactToPrint from 'react-to-print';
+import {
+  useGetAllAlergensQuery,
+  useUploadMenuItemForRestaurantIdMutation
+} from '../../features/apis';
+import { useParams } from 'react-router-dom';
 
 export default function Categories() {
+  const { restaurantId } = useParams();
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState('0');
   const toggleAccordion = (id) => {
@@ -50,9 +54,11 @@ export default function Categories() {
   const isAdmin = useSelector(getUserRole);
   const dispatch = useDispatch();
   const categories = useSelector(selectCategories);
-  const allergens = useSelector(selectAllergens);
+  const { data: allergensResponse } = useGetAllAlergensQuery();
   const activeCategory = useSelector(selectActiveCategory);
   const QRCodeRef = useRef(null);
+
+  const [uploadMenuItem] = useUploadMenuItemForRestaurantIdMutation();
   return (
     <div style={{ margin: '20px' }}>
       <Nav justified pills vertical>
@@ -116,12 +122,12 @@ export default function Categories() {
                         <input id="dish-name" style={{ width: '100%' }} />
                         <br />
                         <span>Allergens:</span>
-                        {allergens.map((allergen, idx) => {
+                        {allergensResponse?.allergens?.map((allergen, idx) => {
                           return (
                             <>
                               {'  '}
                               <Input type="checkbox" id={idx} />{' '}
-                              <Label check>{allergen}</Label>
+                              <Label check>{allergen.name}</Label>
                             </>
                           );
                         })}
@@ -157,12 +163,13 @@ export default function Categories() {
                             const item = {
                               category,
                               subcategory,
-                              dishName,
+                              name: dishName,
                               description,
                               price,
-                              allergens: []
+                              imageID: 2,
+                              allergenIDs: []
                             };
-                            dispatch(addProduct(item));
+                            uploadMenuItem({ restaurantId, menuItem: item });
                             setOpen('0');
                           }}
                         >

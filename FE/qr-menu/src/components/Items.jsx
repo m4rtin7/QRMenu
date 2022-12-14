@@ -17,16 +17,27 @@ import Wheat from '../icons/wheat.svg';
 import Egg from '../icons/egg.svg';
 import Milk from '../icons/milk.svg';
 import Peanuts from '../icons/peanuts.svg';
+import { useParams } from 'react-router-dom';
+import { useGetItemsByRestaurantIdQuery } from '../features/apis';
 
 export default function Items() {
-  const menu = useSelector(selectMenu);
+  const { restaurantId } = useParams();
+  const { data: menu, isLoading: isMenuLoading } =
+    useGetItemsByRestaurantIdQuery([restaurantId]);
   return (
     <div className="items-container">
       <div className="group-container">
         <CardGroup className="card-group">
-          {menu.map((menuItem) => {
-            const { id, name, category, desc, price, allergens, img } =
-              menuItem;
+          {menu?.menuItems.map((menuItem) => {
+            const {
+              id,
+              name,
+              category,
+              description: desc,
+              price,
+              allergens,
+              imageId: img
+            } = menuItem;
             return (
               <div key={id} className="card-container">
                 <Card color="dark" inverse className="card">
