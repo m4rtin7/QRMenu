@@ -4,7 +4,8 @@ import {
   editProduct,
   selectCategories,
   selectMenu,
-  selectSubcategories
+  selectSubcategories,
+  selectActiveCategory
 } from '../../features/menuSlice';
 import _ from 'lodash';
 import {
@@ -48,6 +49,7 @@ export default function Items() {
   const [description, setDescription] = useState('');
 
   const dispatch = useDispatch();
+  const activeCategory = useSelector(selectActiveCategory);
   const { data: menu, isLoading: isMenuLoading } =
     useGetItemsByRestaurantIdQuery([restaurantId]);
   const categories = useSelector(selectCategories);
@@ -89,215 +91,231 @@ export default function Items() {
           <div>Loading...</div>
         ) : (
           <CardGroup>
-            {menu.menuItems.map((item) => {
-              const {
-                id,
-                name,
-                category,
-                description: desc,
-                price,
-                allergens,
-                imageID: img
-              } = item;
-              return (
-                <div key={id} className="card-container">
-                  <Card color="dark" inverse className="card">
-                    <div className="card-image">
-                      <img alt="Sample" src={img ? img : ''} />
-                    </div>
-                    <CardBody>
-                      <div style={{ display: 'block' }}>
-                        <CardTitle tag="h5" style={{ display: 'inline-block' }}>
-                          {name}
-                        </CardTitle>
-                        <img
-                          src={EditIcon}
-                          className="edit-icon"
-                          alt="Edit Icon"
-                          onClick={() => {
-                            openModal(id);
-                            setProdName(name);
-                            setPriceValue(price);
-                            setDescription(desc);
-                            setCheckedAllergens(allergens);
-                          }}
-                          id={`${id}_${name}`}
-                        />
-                        <img
-                          src={Trash}
-                          className="remove-icon"
-                          alt="Remove Icon"
-                          onClick={() => {
-                            deleteItem({ menuItemId: id, restaurantId });
-                          }}
-                        />
-                        <Modal isOpen={openedModal === id} toggle={closeModal}>
-                          <ModalHeader>Edit menu item</ModalHeader>
-                          <ModalBody>
-                            <Form>
-                              <Row>
-                                <Col>
-                                  <span>Category:</span>
-                                  <Input
-                                    id="category-select"
-                                    name="select"
-                                    type="select"
-                                  >
-                                    <option>{category}</option>
-                                    {categories
-                                      .filter((opt) => opt !== category)
-                                      .map((cat, idx) => {
+            {menu?.menuItems
+              .filter((item) => item.category === activeCategory)
+              .map((item) => {
+                const {
+                  id,
+                  name,
+                  category,
+                  description: desc,
+                  price,
+                  allergens,
+                  imageID: img
+                } = item;
+                return (
+                  <div key={id} className="card-container">
+                    <Card color="dark" inverse className="card">
+                      <div className="card-image">
+                        <img alt="Sample" src={img ? img : ''} />
+                      </div>
+                      <CardBody>
+                        <div style={{ display: 'block' }}>
+                          <CardTitle
+                            tag="h5"
+                            style={{ display: 'inline-block' }}
+                          >
+                            {name}
+                          </CardTitle>
+                          <img
+                            src={EditIcon}
+                            className="edit-icon"
+                            alt="Edit Icon"
+                            onClick={() => {
+                              openModal(id);
+                              setProdName(name);
+                              setPriceValue(price);
+                              setDescription(desc);
+                              setCheckedAllergens(allergens);
+                            }}
+                            id={`${id}_${name}`}
+                          />
+                          <img
+                            src={Trash}
+                            className="remove-icon"
+                            alt="Remove Icon"
+                            onClick={() => {
+                              deleteItem({ menuItemId: id, restaurantId });
+                            }}
+                          />
+                          <Modal
+                            isOpen={openedModal === id}
+                            toggle={closeModal}
+                          >
+                            <ModalHeader>Edit menu item</ModalHeader>
+                            <ModalBody>
+                              <Form>
+                                <Row>
+                                  <Col>
+                                    <span>Category:</span>
+                                    <Input
+                                      id="category-select"
+                                      name="select"
+                                      type="select"
+                                    >
+                                      <option>{category}</option>
+                                      {categories
+                                        .filter((opt) => opt !== category)
+                                        .map((cat, idx) => {
+                                          return (
+                                            <option key={idx}>
+                                              <span>{cat}</span>
+                                            </option>
+                                          );
+                                        })}
+                                    </Input>
+                                  </Col>
+                                  <Col>
+                                    <span>Subcategory:</span>
+                                    <Input
+                                      id="subcategory-select"
+                                      name="subcategory-select"
+                                      type="select"
+                                    >
+                                      {subcategories.map((subcat, idx) => {
                                         return (
                                           <option key={idx}>
-                                            <span>{cat}</span>
+                                            <span>{subcat}</span>
                                           </option>
                                         );
                                       })}
-                                  </Input>
-                                </Col>
-                                <Col>
-                                  <span>Subcategory:</span>
-                                  <Input
-                                    id="subcategory-select"
-                                    name="subcategory-select"
-                                    type="select"
-                                  >
-                                    {subcategories.map((subcat, idx) => {
-                                      return (
-                                        <option key={idx}>
-                                          <span>{subcat}</span>
-                                        </option>
-                                      );
-                                    })}
-                                  </Input>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <span>Dish name</span>
-                                  <Input
-                                    id="dish-name"
-                                    value={prodName}
-                                    type="text"
-                                    onChange={(event) =>
-                                      setProdName(event.target.value)
-                                    }
-                                  />
-                                </Col>
-                                <Col>
-                                  <span>
-                                    Price:{' '}
+                                    </Input>
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Col>
+                                    <span>Dish name</span>
                                     <Input
-                                      id="price"
-                                      type="number"
-                                      value={priceValue}
+                                      id="dish-name"
+                                      value={prodName}
+                                      type="text"
                                       onChange={(event) =>
-                                        setPriceValue(event.target.value)
+                                        setProdName(event.target.value)
                                       }
                                     />
-                                  </span>
-                                </Col>
-                              </Row>
-                              <span>Allergens:</span>
-                              {allAllergens?.allergens.map((allergen, idx) => {
-                                return (
-                                  <>
-                                    {'  '}
-                                    <Input
-                                      type="checkbox"
-                                      checked={checkedAllergens[idx]}
-                                      onChange={() =>
-                                        handleAllergensChange(idx)
-                                      }
-                                      id={idx}
-                                    />{' '}
-                                    <Label>{allergen.name}</Label>
-                                  </>
-                                );
-                              })}
-                              <br />
-                              <span>Description</span>
-                              <Input
-                                id="description"
-                                type="textarea"
-                                rows="4"
-                                value={description}
-                                onChange={(event) =>
-                                  setDescription(event.target.value)
-                                }
-                              />
-                              <Label for="exampleFile">File</Label>
-                              <Input id="exampleFile" name="file" type="file" />
-                              <FormText>Upload picture of item</FormText>
-                            </Form>
-                          </ModalBody>
-                          <ModalFooter>
-                            <Button
-                              color="dark"
-                              onClick={() => {
-                                const category =
-                                  document.getElementById(
-                                    'category-select'
-                                  ).value;
-                                const subcategory =
-                                  document.getElementById(
-                                    'subcategory-select'
-                                  ).value;
-                                const dishName =
-                                  document.getElementById('dish-name').value;
-                                const description =
-                                  document.getElementById('description').value;
-                                const price =
-                                  document.getElementById('price').value;
-                                const menuItem = {
-                                  category,
-                                  subcategory: subcategory
-                                    ? subcategory
-                                    : category,
-                                  name: dishName,
-                                  description,
-                                  price,
-                                  allergenIDs: allAllergens?.allergens
-                                    .filter((a, i) => checkedAllergens[i])
-                                    .map((allergen) => allergen.id),
-                                  imageID: 2 //TODO: fix this
-                                };
-                                updateItem({
-                                  restaurantId,
-                                  menuItemId: id,
-                                  menuItem
-                                });
-                                closeModal();
-                              }}
-                            >
-                              Save
-                            </Button>
-                          </ModalFooter>
-                        </Modal>
-                      </div>
-                      <CardSubtitle className="mb-2 text-muted" tag="h6">
-                        <span className="dot">
-                          <img src={Wheat} />
-                        </span>
-                        <span className="dot">
-                          <img src={Egg} />
-                        </span>
-                        <span className="dot">
-                          <img src={Milk} />
-                        </span>
-                        <span className="dot">
-                          <img src={Peanuts} />
-                        </span>
-                      </CardSubtitle>
-                      <CardText>{desc}</CardText>
-                      <div className="bottom-panel">
-                        <span className="price">€ {price}</span>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </div>
-              );
-            })}
+                                  </Col>
+                                  <Col>
+                                    <span>
+                                      Price:{' '}
+                                      <Input
+                                        id="price"
+                                        type="number"
+                                        value={priceValue}
+                                        onChange={(event) =>
+                                          setPriceValue(event.target.value)
+                                        }
+                                      />
+                                    </span>
+                                  </Col>
+                                </Row>
+                                <span>Allergens:</span>
+                                {allAllergens?.allergens.map(
+                                  (allergen, idx) => {
+                                    return (
+                                      <>
+                                        {'  '}
+                                        <Input
+                                          type="checkbox"
+                                          checked={checkedAllergens[idx]}
+                                          onChange={() =>
+                                            handleAllergensChange(idx)
+                                          }
+                                          id={idx}
+                                        />{' '}
+                                        <Label>{allergen.name}</Label>
+                                      </>
+                                    );
+                                  }
+                                )}
+                                <br />
+                                <span>Description</span>
+                                <Input
+                                  id="description"
+                                  type="textarea"
+                                  rows="4"
+                                  value={description}
+                                  onChange={(event) =>
+                                    setDescription(event.target.value)
+                                  }
+                                />
+                                <Label for="exampleFile">File</Label>
+                                <Input
+                                  id="exampleFile"
+                                  name="file"
+                                  type="file"
+                                />
+                                <FormText>Upload picture of item</FormText>
+                              </Form>
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button
+                                color="dark"
+                                onClick={() => {
+                                  const category =
+                                    document.getElementById(
+                                      'category-select'
+                                    ).value;
+                                  const subcategory =
+                                    document.getElementById(
+                                      'subcategory-select'
+                                    ).value;
+                                  const dishName =
+                                    document.getElementById('dish-name').value;
+                                  const description =
+                                    document.getElementById(
+                                      'description'
+                                    ).value;
+                                  const price =
+                                    document.getElementById('price').value;
+                                  const menuItem = {
+                                    category,
+                                    subcategory: subcategory
+                                      ? subcategory
+                                      : category,
+                                    name: dishName,
+                                    description,
+                                    price,
+                                    allergenIDs: allAllergens?.allergens
+                                      .filter((a, i) => checkedAllergens[i])
+                                      .map((allergen) => allergen.id),
+                                    imageID: 2 //TODO: fix this
+                                  };
+                                  updateItem({
+                                    restaurantId,
+                                    menuItemId: id,
+                                    menuItem
+                                  });
+                                  closeModal();
+                                }}
+                              >
+                                Save
+                              </Button>
+                            </ModalFooter>
+                          </Modal>
+                        </div>
+                        <CardSubtitle className="mb-2 text-muted" tag="h6">
+                          <span className="dot">
+                            <img src={Wheat} />
+                          </span>
+                          <span className="dot">
+                            <img src={Egg} />
+                          </span>
+                          <span className="dot">
+                            <img src={Milk} />
+                          </span>
+                          <span className="dot">
+                            <img src={Peanuts} />
+                          </span>
+                        </CardSubtitle>
+                        <CardText>{desc}</CardText>
+                        <div className="bottom-panel">
+                          <span className="price">€ {price}</span>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </div>
+                );
+              })}
           </CardGroup>
         )}
       </div>

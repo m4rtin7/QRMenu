@@ -18,7 +18,7 @@ const initialState = {
     new Set(data.items.map((item) => item.subcategory))
   ),
   allAllergens: [],
-  activeCategory: 'All'
+  activeCategory: 'Main'
 };
 
 function onlyUnique(value, index, self) {

@@ -37,6 +37,7 @@ import {
   useUploadMenuItemForRestaurantIdMutation
 } from '../../features/apis';
 import { useParams } from 'react-router-dom';
+import { useGetItemsByRestaurantIdQuery } from '../../features/apis';
 
 export default function Categories() {
   const { restaurantId } = useParams();
@@ -53,10 +54,14 @@ export default function Categories() {
   const toggle = () => setModal(!modal);
   const isAdmin = useSelector(getUserRole);
   const dispatch = useDispatch();
-  const categories = useSelector(selectCategories);
   const { data: allergensResponse } = useGetAllAlergensQuery();
   const activeCategory = useSelector(selectActiveCategory);
   const QRCodeRef = useRef(null);
+  const { data: menu, isLoading: isMenuLoading } =
+    useGetItemsByRestaurantIdQuery([restaurantId]);
+  const allCategories = [
+    ...new Set(menu?.menuItems.map((item) => item.category))
+  ];
 
   const [uploadMenuItem] = useUploadMenuItemForRestaurantIdMutation();
   return (
@@ -105,7 +110,7 @@ export default function Categories() {
                       <AccordionBody accordionId="2">
                         <span>Choose related category:</span>
                         <Input id="category-select" name="select" type="select">
-                          {categories.map((category, idx) => {
+                          {allCategories.map((category, idx) => {
                             return (
                               <option key={idx}>
                                 <span>{category}</span>
@@ -188,7 +193,7 @@ export default function Categories() {
             </Modal>
           </>
         ) : null}
-        {categories.map((category, index) => {
+        {allCategories.map((category, index) => {
           return (
             <>
               <NavItem key={index} className="categories-container">
