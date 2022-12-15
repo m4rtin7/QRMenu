@@ -3,6 +3,7 @@ import { Router } from 'express'
 import AuthRouter from './authorization'
 import AllergenRouter from './allergens'
 import FileRouter from './files'
+import UsersRouter from './users'
 import RolesRouter from './roles'
 import MenuItemsRouter from './menu-items'
 
@@ -14,6 +15,7 @@ export default () => {
     router.use('/authorization', AuthRouter())
     router.use('/allergens', AllergenRouter())
     router.use('/files', FileRouter())
+    router.use('/users', UsersRouter())
     //router.use('/roles', RolesRouter())
     router.use('/:restaurantID/menu-items', MenuItemsRouter())
 
