@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import data from '../data/menu.json';
 
 const allCategories = (items) => {
   let categories = ['All'];
@@ -12,11 +11,10 @@ const allCategories = (items) => {
 };
 
 const initialState = {
-  menuItems: data.items,
-  allCategories: allCategories(data.items),
-  allSubcategories: Array.from(
-    new Set(data.items.map((item) => item.subcategory))
-  ),
+  allItems: [],
+  menuItems: [],
+  allCategories: [],
+  allSubcategories: [],
   allAllergens: [],
   activeCategory: 'All'
 };
@@ -27,9 +25,13 @@ function onlyUnique(value, index, self) {
 
 const mapAllergens = (data) => {
   let allergens = [];
-  data.items.map((item) => {
-    item.allergens.forEach((all) => {
-      allergens.push(all);
+  data.map((item) => {
+    item.allergens.forEach((allergen) => {
+      allergens.push({
+        id: allergen.id,
+        name: allergen.name,
+        description: allergen.description
+      });
     });
   });
   return allergens.filter(onlyUnique);
@@ -39,15 +41,23 @@ export const menuSlice = createSlice({
   name: 'menu',
   initialState,
   reducers: {
+    initializeMenu: (state, action) => {
+      state.allItems = action.payload;
+      state.menuItems = action.payload;
+      state.allCategories = allCategories(action.payload);
+      state.allSubcategories = Array.from(
+        new Set(action.payload.map((item) => item.subcategory))
+      );
+    },
     filter: (state, action) => {
       state.menuItems =
         action.payload === 'All'
-          ? data.items
-          : data.items.filter((item) => item.category === action.payload);
+          ? state.allItems
+          : state.allItems.filter((item) => item.category === action.payload);
       state.activeCategory = action.payload;
     },
     setAllergensList: (state) => {
-      state.allAllergens = mapAllergens(data);
+      state.allAllergens = mapAllergens(state.allItems);
     },
     addCategory: (state, action) => {
       state.allCategories.push(action.payload);
@@ -56,7 +66,7 @@ export const menuSlice = createSlice({
       state.menuItems = [
         ...state.menuItems,
         {
-          id: Math.max(...data.items.map((it) => it.id)) + 1,
+          id: Math.max(...state.allItems.map((it) => it.id)) + 1,
           category: action.payload.category,
           subcategory: action.payload.subcategory,
           name: action.payload.dishName,
@@ -96,7 +106,7 @@ export const menuSlice = createSlice({
   }
 });
 
-export const { filter } = menuSlice.actions;
+export const { filter, initializeMenu } = menuSlice.actions;
 export const { addCategory } = menuSlice.actions;
 export const { setAllergensList } = menuSlice.actions;
 export const { addProduct } = menuSlice.actions;

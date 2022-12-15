@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectMenu } from '../features/menuSlice';
-import _ from 'lodash';
 import {
   Card,
   CardBody,
@@ -12,28 +11,25 @@ import {
   Button
 } from 'reactstrap';
 import './Items.css';
-import ShoppingCart from '../icons/shopping_cart.png';
-import Wheat from '../icons/wheat.svg';
-import Egg from '../icons/egg.svg';
-import Milk from '../icons/milk.svg';
-import Peanuts from '../icons/peanuts.svg';
-import { useParams } from 'react-router-dom';
-import { useGetItemsByRestaurantIdQuery } from '../features/apis';
+import ShoppingCart from '../icons/shopping-cart.svg';
+import Wheat from '../icons/1.svg';
+import Egg from '../icons/3.svg';
+import Milk from '../icons/7.svg';
+import Peanuts from '../icons/5.svg';
 
 export default function Items() {
-  const { restaurantId } = useParams();
-  const { data: menu, isLoading: isMenuLoading } =
-    useGetItemsByRestaurantIdQuery([restaurantId]);
+  const menu = useSelector(selectMenu);
+  console.log(menu);
   return (
     <div className="items-container">
       <div className="group-container">
         <CardGroup className="card-group">
-          {menu?.menuItems.map((menuItem) => {
+          {menu?.map((menuItem) => {
             const {
               id,
               name,
               category,
-              description: desc,
+              desc,
               price,
               allergens,
               imageId: img
@@ -47,6 +43,12 @@ export default function Items() {
                   <CardBody>
                     <CardTitle tag="h5">{name}</CardTitle>
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
+                      {/* // create logic to map allergen pictures correctly
+                      {allergens.map((allergen) => (
+                        <span className="dot">
+                          <img src={`al${allergen.id}`} />
+                        </span>
+                      ))}*/}
                       <span className="dot">
                         <img src={Wheat} />
                       </span>
