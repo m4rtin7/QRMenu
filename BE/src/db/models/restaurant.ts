@@ -14,6 +14,7 @@ export interface IOpeningHours {
 export class RestaurantModel extends Model {
 	id: number
 	city: string
+	name: string
 	address: string
 	zipCode: string
 	phone: string
@@ -40,6 +41,10 @@ export default (sequelize: Sequelize, modelName: string) => {
 				primaryKey: true,
 				unique: true,
 				autoIncrement: true
+			},
+			name: {
+				type: DataTypes.TEXT,
+				allowNull: true
 			},
 			city: {
 				type: DataTypes.TEXT,

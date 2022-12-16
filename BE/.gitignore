@@ -3,7 +3,6 @@
 /logs
 /coverage
 /dist
-/files
 /src/ts-joi-interfaces
 /temp
 .env

@@ -53,18 +53,20 @@ export const workflow = async (req: Request, res: Response, next: NextFunction) 
             throw new ErrorBuilder(404, req.t(`error:Restauracia s id ${params.restaurantID} nepatri prihlasenmu uzivatelovi`))
         }
 
-        const foundPhoto = await File.findByPk(parseInt(body.imageID, 10))
+        if (body.imageID) {
+            const foundPhoto = await File.findByPk(parseInt(body.imageID, 10))
         
-		if (!foundPhoto) {
-			throw new ErrorBuilder(404, req.t(`error:Fotka s ID ${body.imageID} nebola nájdená`))
+		    if (!foundPhoto) {
+			    throw new ErrorBuilder(404, req.t(`error:Fotka s ID ${body.imageID} nebola nájdená`))
 		}
+        }
 
         let data = {
             name: body.name,
             price: body.price,
             category: body.category,
             subcategory: body.subcategory,
-            imageID: body.imageID,
+            imageID: body?.imageID,
             createdBy: authUser.id,
             restaurantID: restaurant.id,
             description: body.description,

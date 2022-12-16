@@ -493,6 +493,138 @@
 				}
 			}
 		},
+		"/api/v1/users/": {
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"summary": "PERMISSION: NO",
+				"operationId": "postApiV1Users",
+				"parameters": [],
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"messages": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"message": {
+														"type": "string"
+													},
+													"type": {
+														"type": "string",
+														"enum": [
+															"SUCCESS"
+														]
+													}
+												},
+												"required": [
+													"message",
+													"type"
+												],
+												"additionalProperties": false
+											}
+										},
+										"user": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "integer",
+													"minimum": 1
+												}
+											},
+											"required": [
+												"id"
+											],
+											"additionalProperties": false
+										}
+									},
+									"required": [
+										"messages",
+										"user"
+									],
+									"additionalProperties": false
+								}
+							}
+						}
+					}
+				},
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"format": "email",
+										"maxLength": 255
+									},
+									"password": {
+										"type": "string",
+										"pattern": "^[a-zA-Z0-9]*$",
+										"minLength": 5
+									},
+									"name": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"surname": {
+										"type": "string",
+										"maxLength": 255,
+										"nullable": true
+									},
+									"phone": {
+										"type": "string",
+										"maxLength": 100,
+										"nullable": true
+									},
+									"restaurantName": {
+										"type": "string"
+									},
+									"city": {
+										"type": "string",
+										"nullable": true
+									},
+									"address": {
+										"type": "string",
+										"nullable": true
+									},
+									"zipCode": {
+										"type": "string",
+										"nullable": true
+									},
+									"websiteURL": {
+										"type": "string",
+										"nullable": true
+									},
+									"menuURL": {
+										"type": "string",
+										"nullable": true
+									}
+								},
+								"required": [
+									"email",
+									"password",
+									"name",
+									"surname",
+									"phone",
+									"restaurantName"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
 		"/api/v1/{restaurantID}/menu-items/": {
 			"get": {
 				"tags": [
