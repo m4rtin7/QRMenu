@@ -35,7 +35,7 @@ export default function Items() {
               id,
               name,
               category,
-              desc,
+              description: desc,
               price,
               allergens,
               imageId: img

@@ -12,62 +12,47 @@ import axios from 'axios';
 import { BASE_URL } from './constants';
 import { OrderPage } from './components/OrderPage';
 import Register from './components/RegisterView/Register';
-function createQueryFn(baseUrl) {
-  return async ({ queryKey }) => {
-    const res = await axios.get(baseUrl + queryKey);
-    return res.data;
-  };
-}
 
 function App() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        queryFn: createQueryFn(BASE_URL)
-      }
-    }
-  });
   const isAdmin = useSelector(getUserRole);
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <Router>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/menu/:restaurantId"
-              element={
-                isAdmin ? (
-                  <>
-                    <Header />
-                    <section>
-                      <AdminMenu />
-                    </section>
-                  </>
-                ) : (
-                  <>
-                    <Header />
-                    <section>
-                      <Menu />
-                    </section>
-                  </>
-                )
-              }
-            />
-            <Route
-              path="/menu/:restaurantId/shoppingcart"
-              element={
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Login />} />
+          <Route
+            path="/menu/:restaurantId"
+            element={
+              isAdmin ? (
                 <>
                   <Header />
-                  <OrderPage />
+                  <section>
+                    <AdminMenu />
+                  </section>
                 </>
-              }
-            />
-          </Routes>
-        </Router>
-      </div>
-    </QueryClientProvider>
+              ) : (
+                <>
+                  <Header />
+                  <section>
+                    <Menu />
+                  </section>
+                </>
+              )
+            }
+          />
+          <Route
+            path="/menu/:restaurantId/shoppingcart"
+            element={
+              <>
+                <Header />
+                <OrderPage />
+              </>
+            }
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 
