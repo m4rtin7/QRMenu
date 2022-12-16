@@ -34,6 +34,13 @@ export const defaultApi = createApi({
         method: 'POST'
       })
     }),
+    register: builder.mutation({
+      query: (registerCredentials) => ({
+        url: '/users',
+        body: registerCredentials,
+        method: 'POST'
+      })
+    }),
     uploadMenuItemForRestaurantId: builder.mutation({
       query: ({ restaurantId, menuItem }) => ({
         url: `/${restaurantId}/menu-items`,
@@ -67,6 +74,7 @@ export const {
   useDeleteMenuItemForRestaurantIdMutation,
   useGetItemsByRestaurantIdQuery,
   useLoginMutation,
+  useRegisterMutation,
   useUpdateMenuItemForRestaurantIdMutation,
   useUploadMenuItemForRestaurantIdMutation
 } = defaultApi;

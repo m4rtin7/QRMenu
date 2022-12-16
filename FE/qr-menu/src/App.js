@@ -11,7 +11,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import axios from 'axios';
 import { BASE_URL } from './constants';
 import { OrderPage } from './components/OrderPage';
-
+import Register from './components/RegisterView/Register';
 function createQueryFn(baseUrl) {
   return async ({ queryKey }) => {
     const res = await axios.get(baseUrl + queryKey);
@@ -34,6 +34,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route
               path="/menu/:restaurantId"
               element={
