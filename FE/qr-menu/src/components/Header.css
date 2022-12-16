@@ -2,7 +2,7 @@
   background: #222831;
   height: 50px;
   display: flex;
-  padding: 0px 5% 0px 45%;
+  padding: 0px 3% 0px 45%;
   justify-content: space-between;
   text-align: center;
   align-items: center;
@@ -13,4 +13,20 @@
   font-weight: 500;
   font-size: 24px;
   padding-right: 15px;
+}
+
+.shopping-cart-icon {
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  margin-left: 25px;
+}
+
+.badge-style {
+  height: 50%;
+  background-color: #ffbe33 !important;
+}
+
+.clickable {
+  cursor: pointer;
 }

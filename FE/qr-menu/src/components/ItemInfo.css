@@ -1,0 +1,19 @@
+.col-md-1 {
+  margin-top: 2%;
+  width: 30px;
+  height: 30px;
+}
+
+.col-md-2 {
+  margin-top: 2%;
+}
+
+.mb-3 {
+  width: 70%;
+  height: fit-content;
+  margin-left: 15%;
+}
+
+.clickable {
+  cursor: pointer;
+}

@@ -1,7 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectMenu } from '../features/menuSlice';
-import _ from 'lodash';
 import {
   Card,
   CardBody,
@@ -12,28 +11,31 @@ import {
   Button
 } from 'reactstrap';
 import './Items.css';
-import ShoppingCart from '../icons/shopping_cart.png';
-import Wheat from '../icons/wheat.svg';
-import Egg from '../icons/egg.svg';
-import Milk from '../icons/milk.svg';
-import Peanuts from '../icons/peanuts.svg';
-import { useParams } from 'react-router-dom';
-import { useGetItemsByRestaurantIdQuery } from '../features/apis';
+import ShoppingCart from '../icons/shopping-cart.svg';
+import Wheat from '../icons/1.svg';
+import Egg from '../icons/3.svg';
+import Milk from '../icons/7.svg';
+import Peanuts from '../icons/5.svg';
+import {
+  addProductToTheCart,
+  getProductsInCart
+} from '../features/orderReducer';
 
 export default function Items() {
-  const { restaurantId } = useParams();
-  const { data: menu, isLoading: isMenuLoading } =
-    useGetItemsByRestaurantIdQuery([restaurantId]);
+  const menu = useSelector(selectMenu);
+  const dispatch = useDispatch();
+  const orderedProducts = useSelector(getProductsInCart);
+
   return (
     <div className="items-container">
       <div className="group-container">
         <CardGroup className="card-group">
-          {menu?.menuItems.map((menuItem) => {
+          {menu?.map((menuItem) => {
             const {
               id,
               name,
               category,
-              description: desc,
+              desc,
               price,
               allergens,
               imageId: img
@@ -66,6 +68,15 @@ export default function Items() {
                       <Button
                         style={{ background: '#FFBE33' }}
                         className="rounded-circle"
+                        onClick={() => {
+                          if (
+                            !orderedProducts.find(
+                              (product) => product.id === menuItem.id
+                            )
+                          ) {
+                            dispatch(addProductToTheCart(menuItem));
+                          }
+                        }}
                       >
                         <img
                           style={{ height: '30px', width: '30px' }}

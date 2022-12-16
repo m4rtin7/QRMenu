@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../features/apis';
 import { useEffect } from 'react';
-import { setLoggedIn, setUserRole } from '../../features/userReducer';
+import { setLoggedIn } from '../../features/userReducer';
 import { useDispatch } from 'react-redux';
 
 function Login() {

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './App.css';
 import Menu from './components/Menu';
 import { getUserRole } from './features/userReducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAllergensList } from './features/menuSlice';
+import { useSelector } from 'react-redux';
 import AdminMenu from './components/AdminView/AdminMenu';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/LoginView/Login';
@@ -11,6 +10,7 @@ import { Header } from './components/Header';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import axios from 'axios';
 import { BASE_URL } from './constants';
+import { OrderPage } from './components/OrderPage';
 
 function createQueryFn(baseUrl) {
   return async ({ queryKey }) => {
@@ -28,10 +28,6 @@ function App() {
     }
   });
   const isAdmin = useSelector(getUserRole);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setAllergensList());
-  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
@@ -56,6 +52,15 @@ function App() {
                     </section>
                   </>
                 )
+              }
+            />
+            <Route
+              path="/menu/:restaurantId/shoppingcart"
+              element={
+                <>
+                  <Header />
+                  <OrderPage />
+                </>
               }
             />
           </Routes>

@@ -10,3 +10,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
 }
+
+.page-header {
+  margin-top: 2%;
+}
+
+.order-button {
+  margin-right: 15%;
+  justify-content: end;
+  display: flex;
+}
