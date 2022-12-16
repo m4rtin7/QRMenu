@@ -10,6 +10,7 @@ import { Header } from './components/Header';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import axios from 'axios';
 import { BASE_URL } from './constants';
+import { OrderPage } from './components/OrderPage';
 
 function createQueryFn(baseUrl) {
   return async ({ queryKey }) => {
@@ -58,6 +59,7 @@ function App() {
               element={
                 <>
                   <Header />
+                  <OrderPage />
                 </>
               }
             />

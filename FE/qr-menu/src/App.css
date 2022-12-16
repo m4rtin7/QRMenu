@@ -14,3 +14,9 @@
 .page-header {
   margin-top: 2%;
 }
+
+.order-button {
+  margin-right: 15%;
+  justify-content: end;
+  display: flex;
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectMenu } from '../features/menuSlice';
 import {
   Card,
@@ -16,10 +16,16 @@ import Wheat from '../icons/1.svg';
 import Egg from '../icons/3.svg';
 import Milk from '../icons/7.svg';
 import Peanuts from '../icons/5.svg';
+import {
+  addProductToTheCart,
+  getProductsInCart
+} from '../features/orderReducer';
 
 export default function Items() {
   const menu = useSelector(selectMenu);
-  console.log(menu);
+  const dispatch = useDispatch();
+  const orderedProducts = useSelector(getProductsInCart);
+
   return (
     <div className="items-container">
       <div className="group-container">
@@ -43,12 +49,6 @@ export default function Items() {
                   <CardBody>
                     <CardTitle tag="h5">{name}</CardTitle>
                     <CardSubtitle className="mb-2 text-muted" tag="h6">
-                      {/* // create logic to map allergen pictures correctly
-                      {allergens.map((allergen) => (
-                        <span className="dot">
-                          <img src={`al${allergen.id}`} />
-                        </span>
-                      ))}*/}
                       <span className="dot">
                         <img src={Wheat} />
                       </span>
@@ -68,6 +68,15 @@ export default function Items() {
                       <Button
                         style={{ background: '#FFBE33' }}
                         className="rounded-circle"
+                        onClick={() => {
+                          if (
+                            !orderedProducts.find(
+                              (product) => product.id === menuItem.id
+                            )
+                          ) {
+                            dispatch(addProductToTheCart(menuItem));
+                          }
+                        }}
                       >
                         <img
                           style={{ height: '30px', width: '30px' }}

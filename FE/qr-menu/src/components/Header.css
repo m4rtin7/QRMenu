@@ -21,3 +21,12 @@
   width: 30px;
   margin-left: 25px;
 }
+
+.badge-style{
+  height: 50%;
+  background-color: #ffbe33 !important;
+}
+
+.clickable {
+  cursor: pointer;
+}
