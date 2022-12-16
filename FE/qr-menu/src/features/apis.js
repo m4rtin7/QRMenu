@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const defaultApi = createApi({
   reducerPath: 'defaultApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3001/api/v1',
+    baseUrl: 'http://qrmenu-asdit.herokuapp.com/api/v1',
     prepareHeaders: (headers) => {
       headers.set(
         'Authorization',
@@ -31,6 +31,13 @@ export const defaultApi = createApi({
       query: (loginCredentials) => ({
         url: '/authorization/login',
         body: loginCredentials,
+        method: 'POST'
+      })
+    }),
+    register: builder.mutation({
+      query: (registerCredentials) => ({
+        url: '/users',
+        body: registerCredentials,
         method: 'POST'
       })
     }),
@@ -67,6 +74,7 @@ export const {
   useDeleteMenuItemForRestaurantIdMutation,
   useGetItemsByRestaurantIdQuery,
   useLoginMutation,
+  useRegisterMutation,
   useUpdateMenuItemForRestaurantIdMutation,
   useUploadMenuItemForRestaurantIdMutation
 } = defaultApi;

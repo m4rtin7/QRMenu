@@ -12,7 +12,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const [login, { data: loginData, isLoading, isError }] = useLoginMutation();
+  const [login, { data: loginData, isLoading, isError, error }] =
+    useLoginMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,10 +37,12 @@ function Login() {
         <form onSubmit={(e) => e.preventDefault()}>
           <div>
             <label>Email</label>
+            <br></br>
             <input type="text" onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
             <label>Password</label>
+            <br></br>
             <input
               type="password"
               onChange={(e) => setPassword(e.target.value)}
@@ -51,6 +54,8 @@ function Login() {
         </form>
       </div>
       <Link to="/menu/1">Click here for menu page!</Link>
+      <br></br>
+      <Link to="/register">Register</Link>
     </div>
   );
 }
