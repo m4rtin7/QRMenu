@@ -59,6 +59,29 @@ export default function Categories() {
   const { data: allergensResponse } = useGetAllAlergensQuery();
   const activeCategory = useSelector(selectActiveCategory);
   const QRCodeRef = useRef(null);
+  const [validationError, setValidationError] = useState('');
+
+  function validate(subcategory, dishName, description, price) {
+    if (subcategory == '') {
+      setValidationError('Subcategory cannot be empty');
+      return false;
+    }
+    if (dishName == '') {
+      setValidationError('Dish name cannot be empty');
+      return false;
+    }
+    const number = parseInt(price);
+    if (isNaN(number)) {
+      setValidationError('Price needs to be number');
+      return false;
+    }
+    if (description == '') {
+      setValidationError('Description cannot be empty');
+      return false;
+    }
+    setValidationError('');
+    return true;
+  }
 
   const [uploadMenuItem] = useUploadMenuItemForRestaurantIdMutation();
   const { data, status: menuLoadedStatus } = useGetItemsByRestaurantIdQuery([
@@ -181,12 +204,22 @@ export default function Categories() {
                               imageID: 2,
                               allergenIDs: []
                             };
-                            uploadMenuItem({ restaurantId, menuItem: item });
-                            setOpen('0');
+                            if (
+                              validate(
+                                subcategory,
+                                dishName,
+                                description,
+                                price
+                              )
+                            ) {
+                              uploadMenuItem({ restaurantId, menuItem: item });
+                              setOpen('0');
+                            }
                           }}
                         >
                           Add
                         </Button>
+                        <p style={{ color: 'red' }}>{validationError}</p>
                       </AccordionBody>
                     </AccordionItem>
                   </Accordion>

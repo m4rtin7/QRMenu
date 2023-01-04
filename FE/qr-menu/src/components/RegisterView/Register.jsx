@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from 'reactstrap';
 import { useRegisterMutation } from '../../features/apis';
 import { useNavigate } from 'react-router-dom';
+import { Spinner } from 'reactstrap';
 
 function Register() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,7 @@ function Register() {
   const [phone, setPhone] = useState('');
   const [restaurantName, setRestaurantName] = useState('');
   const navigate = useNavigate();
+  const [validationError, setValidationError] = useState('');
 
   const [register, { data: loginData, isLoading, isError, error }] =
     useRegisterMutation();
@@ -21,12 +23,26 @@ function Register() {
   }, [loginData]);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Spinner color="dark">Loading...</Spinner>;
   }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  const validate = () => {
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setValidationError('Wrong email format');
+    }
+    if (password.length < 5) {
+      setValidationError('Pasword needs to have atleast 5 characters');
+    }
+    if (
+      email == '' ||
+      name == '' ||
+      surname == '' ||
+      phone == '' ||
+      restaurantName == ''
+    ) {
+      setValidationError('All fields are required');
+    }
+  };
 
   return (
     <div>
@@ -70,7 +86,9 @@ function Register() {
             />
           </div>
           <Button
-            onClick={() =>
+            style={{ margin: '5px' }}
+            onClick={() => {
+              validate();
               register({
                 email: email,
                 password: password,
@@ -78,11 +96,12 @@ function Register() {
                 surname: surname,
                 phone: phone,
                 restaurantName: restaurantName
-              })
-            }
+              });
+            }}
           >
             Submit
           </Button>
+          <p style={{ color: 'red' }}>{validationError}</p>
         </form>
       </div>
     </div>

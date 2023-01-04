@@ -36,6 +36,8 @@ import {
   useUpdateMenuItemForRestaurantIdMutation
 } from '../../features/apis';
 import { useParams } from 'react-router-dom';
+import { BASE_URL } from '../../constants';
+import { Spinner } from 'reactstrap';
 
 export default function Items() {
   const { restaurantId } = useParams();
@@ -54,6 +56,25 @@ export default function Items() {
   const [deleteItem] = useDeleteMenuItemForRestaurantIdMutation();
   const [updateItem] = useUpdateMenuItemForRestaurantIdMutation();
   const [checkedAllergens, setCheckedAllergens] = useState([]);
+  const [validationError, setValidationError] = useState('');
+
+  function validate(subcategory, dishName, description, price) {
+    if (dishName == '') {
+      setValidationError('Dish name cannot be empty');
+      return false;
+    }
+    const number = parseInt(price);
+    if (isNaN(number)) {
+      setValidationError('Price needs to be number');
+      return false;
+    }
+    if (description == '') {
+      setValidationError('Description cannot be empty');
+      return false;
+    }
+    setValidationError('');
+    return true;
+  }
 
   const {
     data: allAllergens,
@@ -63,7 +84,7 @@ export default function Items() {
   } = useGetAllAlergensQuery();
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Spinner color="dark">Loading...</Spinner>;
   }
   if (isError) {
     return <span>Error: {error.message}</span>;
@@ -89,13 +110,20 @@ export default function Items() {
               description: desc,
               price,
               allergens,
-              imageID: img
+              image
             } = item;
             return (
               <div key={id} className="card-container">
                 <Card color="dark" inverse className="card">
                   <div className="card-image">
-                    <img alt="Sample" src={img ? img : ''} />
+                    <img
+                      alt="Sample"
+                      src={
+                        image
+                          ? BASE_URL + image.path
+                          : BASE_URL + '/default_food.jpg'
+                      }
+                    />
                   </div>
                   <CardBody>
                     <div style={{ display: 'block' }}>
@@ -220,6 +248,7 @@ export default function Items() {
                             <Input id="exampleFile" name="file" type="file" />
                             <FormText>Upload picture of item</FormText>
                           </Form>
+                          <p style={{ color: 'red' }}>{validationError}</p>
                         </ModalBody>
                         <ModalFooter>
                           <Button
@@ -250,14 +279,24 @@ export default function Items() {
                                 allergenIDs: allAllergens?.allergens
                                   .filter((a, i) => checkedAllergens[i])
                                   .map((allergen) => allergen.id),
-                                imageID: 2 //TODO: fix this
+                                imageID: menu.find((i) => i.name == dishName)
+                                  .imageID
                               };
-                              updateItem({
-                                restaurantId,
-                                menuItemId: id,
-                                menuItem
-                              });
-                              closeModal();
+                              if (
+                                validate(
+                                  subcategory,
+                                  dishName,
+                                  description,
+                                  price
+                                )
+                              ) {
+                                updateItem({
+                                  restaurantId,
+                                  menuItemId: id,
+                                  menuItem
+                                });
+                                closeModal();
+                              }
                             }}
                           >
                             Save
