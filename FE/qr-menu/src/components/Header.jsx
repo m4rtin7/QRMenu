@@ -10,6 +10,7 @@ import {
   getProductsInCart,
   resetCart
 } from '../features/orderReducer';
+import { useParams } from 'react-router-dom';
 
 export const Header = () => {
   const dispatch = useDispatch();
@@ -17,12 +18,16 @@ export const Header = () => {
   const isAdmin = useSelector(getUserRole);
   const productsInCart = useSelector(getProductsInCart);
   const isOrderFinalized = useSelector(getIsFinalized);
+  const { restaurantId } = useParams();
 
   return (
     <div className="header">
       <span className="name"> Remy kitchen</span>
       <div style={{ display: 'flex' }}>
-        <span className="name clickable" onClick={() => navigate('/menu/1')}>
+        <span
+          className="name clickable"
+          onClick={() => navigate('/menu/' + restaurantId)}
+        >
           Menu
         </span>
         <span className="name">About us</span>
