@@ -6,6 +6,7 @@ import { useLoginMutation } from '../../features/apis';
 import { useEffect } from 'react';
 import { setLoggedIn } from '../../features/userReducer';
 import { useDispatch } from 'react-redux';
+import { Spinner } from 'reactstrap';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -24,12 +25,9 @@ function Login() {
   }, [loginData]);
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Spinner color="dark">Loading...</Spinner>;
   }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
   return (
     <div>
       <h1>LOGIN</h1>
@@ -48,14 +46,21 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button onClick={() => login({ email: email, password: password })}>
-            Submit
+          <Button
+            style={{ margin: '5px' }}
+            onClick={() => login({ email: email, password: password })}
+          >
+            Login
+          </Button>
+          <Button
+            style={{ margin: '5px' }}
+            onClick={() => navigate('/register')}
+          >
+            Register
           </Button>
         </form>
+        {isError && <p style={{ color: 'red' }}>Wrong email or password</p>}
       </div>
-      <Link to="/menu/1">Click here for menu page!</Link>
-      <br></br>
-      <Link to="/register">Register</Link>
     </div>
   );
 }
