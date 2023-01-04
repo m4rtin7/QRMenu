@@ -20,6 +20,7 @@ import {
   addProductToTheCart,
   getProductsInCart
 } from '../features/orderReducer';
+import { BASE_URL } from '../constants';
 
 export default function Items() {
   const menu = useSelector(selectMenu);
@@ -38,13 +39,20 @@ export default function Items() {
               description: desc,
               price,
               allergens,
-              imageId: img
+              image
             } = menuItem;
             return (
               <div key={id} className="card-container">
                 <Card color="dark" inverse className="card">
                   <div className="card-image">
-                    <img alt="Sample" src={img} />
+                    <img
+                      alt="Sample"
+                      src={
+                        image
+                          ? BASE_URL + image.path
+                          : BASE_URL + '/default_food.jpg'
+                      }
+                    />
                   </div>
                   <CardBody>
                     <CardTitle tag="h5">{name}</CardTitle>

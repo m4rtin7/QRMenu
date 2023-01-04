@@ -36,6 +36,7 @@ import {
   useUpdateMenuItemForRestaurantIdMutation
 } from '../../features/apis';
 import { useParams } from 'react-router-dom';
+import { BASE_URL } from '../../constants';
 
 export default function Items() {
   const { restaurantId } = useParams();
@@ -89,13 +90,21 @@ export default function Items() {
               description: desc,
               price,
               allergens,
-              imageID: img
+              image
             } = item;
+            console.log(image);
             return (
               <div key={id} className="card-container">
                 <Card color="dark" inverse className="card">
                   <div className="card-image">
-                    <img alt="Sample" src={img ? img : ''} />
+                    <img
+                      alt="Sample"
+                      src={
+                        image
+                          ? BASE_URL + image.path
+                          : BASE_URL + '/default_food.jpg'
+                      }
+                    />
                   </div>
                   <CardBody>
                     <div style={{ display: 'block' }}>
@@ -250,7 +259,8 @@ export default function Items() {
                                 allergenIDs: allAllergens?.allergens
                                   .filter((a, i) => checkedAllergens[i])
                                   .map((allergen) => allergen.id),
-                                imageID: 2 //TODO: fix this
+                                imageID: menu.find((i) => i.name == dishName)
+                                  .imageID
                               };
                               updateItem({
                                 restaurantId,
