@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   addCategory,
   deleteCategory,
   filter,
+  initializeMenu,
   selectActiveCategory,
   selectCategories
 } from '../../features/menuSlice';
@@ -34,6 +35,7 @@ import { useRef } from 'react';
 import ReactToPrint from 'react-to-print';
 import {
   useGetAllAlergensQuery,
+  useGetItemsByRestaurantIdQuery,
   useUploadMenuItemForRestaurantIdMutation
 } from '../../features/apis';
 import { useParams } from 'react-router-dom';
@@ -59,6 +61,16 @@ export default function Categories() {
   const QRCodeRef = useRef(null);
 
   const [uploadMenuItem] = useUploadMenuItemForRestaurantIdMutation();
+  const { data, status: menuLoadedStatus } = useGetItemsByRestaurantIdQuery([
+    restaurantId
+  ]);
+
+  useEffect(() => {
+    if (menuLoadedStatus === 'fulfilled') {
+      dispatch(initializeMenu(data.menuItems));
+    }
+  }, [menuLoadedStatus]);
+
   return (
     <div style={{ margin: '20px' }}>
       <Nav justified pills vertical>
