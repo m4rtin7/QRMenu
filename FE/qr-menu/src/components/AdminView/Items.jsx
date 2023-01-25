@@ -55,7 +55,22 @@ export default function Items() {
 
   const [deleteItem] = useDeleteMenuItemForRestaurantIdMutation();
   const [updateItem] = useUpdateMenuItemForRestaurantIdMutation();
-  const [checkedAllergens, setCheckedAllergens] = useState([]);
+  const [checkedAllergens, setCheckedAllergens] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]);
   const [validationError, setValidationError] = useState('');
 
   function validate(subcategory, dishName, description, price) {
@@ -94,8 +109,15 @@ export default function Items() {
     const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
       i === idx ? !a : a
     );
-
     setCheckedAllergens(updatedCheckedAllergens);
+  };
+
+  const initCheckedAllergens = (allergens) => {
+    const allergenIds = allergens.map((a) => a.id);
+    const initializeAllergens = allAllergens.allergens.map((a) =>
+      allergenIds.includes(a.id)
+    );
+    setCheckedAllergens(initializeAllergens);
   };
 
   return (
@@ -139,7 +161,7 @@ export default function Items() {
                           setProdName(name);
                           setPriceValue(price);
                           setDescription(desc);
-                          setCheckedAllergens(allergens);
+                          initCheckedAllergens(allergens);
                         }}
                         id={`${id}_${name}`}
                       />
