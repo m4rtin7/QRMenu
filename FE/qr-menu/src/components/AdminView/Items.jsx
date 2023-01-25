@@ -94,8 +94,15 @@ export default function Items() {
     const updatedCheckedAllergens = checkedAllergens.map((a, i) =>
       i === idx ? !a : a
     );
-
     setCheckedAllergens(updatedCheckedAllergens);
+  };
+
+  const initCheckedAllergens = (allergens) => {
+    const allergenIds = allergens.map((a) => a.id);
+    const initializeAllergens = allAllergens.allergens.map((a) =>
+      allergenIds.includes(a.id)
+    );
+    setCheckedAllergens(initializeAllergens);
   };
 
   return (
@@ -139,7 +146,7 @@ export default function Items() {
                           setProdName(name);
                           setPriceValue(price);
                           setDescription(desc);
-                          setCheckedAllergens(allergens);
+                          initCheckedAllergens(allergens);
                         }}
                         id={`${id}_${name}`}
                       />
