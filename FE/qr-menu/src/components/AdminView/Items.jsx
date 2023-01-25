@@ -55,22 +55,7 @@ export default function Items() {
 
   const [deleteItem] = useDeleteMenuItemForRestaurantIdMutation();
   const [updateItem] = useUpdateMenuItemForRestaurantIdMutation();
-  const [checkedAllergens, setCheckedAllergens] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ]);
+  const [checkedAllergens, setCheckedAllergens] = useState([]);
   const [validationError, setValidationError] = useState('');
 
   function validate(subcategory, dishName, description, price) {
